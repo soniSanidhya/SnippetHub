@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="40" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M10 20L20 10M20 10V15M20 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M30 20L20 30M20 30V25M20 30H25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="45" y="27" fill="currentColor" font-family="system-ui" font-size="24" font-weight="bold">SnippetHub</text>
+</svg>
