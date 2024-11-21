@@ -7,14 +7,16 @@ import CustomSelect from './CustomSelect';
 
 export default function SnippetDetail({ snippet, onClose }) {
   const [comment, setComment] = useState('');
-  const [upvoted, setUpvoted] = useState(false);
+  const [votes, setVotes] = useState({ up: snippet.likes, down: 0 });
+  const [userVote, setUserVote] = useState(null);
   const [selectedCollection, setSelectedCollection] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [editedCode, setEditedCode] = useState(snippet.code);
   const [editedTitle, setEditedTitle] = useState(snippet.title);
   const [editedDescription, setEditedDescription] = useState(snippet.description);
   const [selectedVersion, setSelectedVersion] = useState({ value: 'current', label: 'Current Version' });
-console.log(snippet);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteType, setDeleteType] = useState(null); // 'version' or 'snippet'
 
   // Dummy collections data
   const collections = [
@@ -24,14 +26,27 @@ console.log(snippet);
   ];
 
   // Dummy version history
-  const versions = [
+  const [versions, setVersions] = useState([
     { value: 'current', label: 'Current Version', date: new Date().toISOString() },
     { value: 'v2', label: 'Version 2', date: '2024-02-15T10:30:00Z' },
     { value: 'v1', label: 'Version 1', date: '2024-02-10T15:45:00Z' },
-  ];
+  ]);
 
-  const handleUpvote = () => {
-    setUpvoted(!upvoted);
+  const handleVote = (type) => {
+    if (userVote === type) {
+      setVotes(prev => ({
+        ...prev,
+        [type]: prev[type] - 1
+      }));
+      setUserVote(null);
+    } else {
+      setVotes(prev => ({
+        ...prev,
+        [type]: prev[type] + 1,
+        [type === 'up' ? 'down' : 'up']: userVote === (type === 'up' ? 'down' : 'up') ? prev[type === 'up' ? 'down' : 'up'] - 1 : prev[type === 'up' ? 'down' : 'up']
+      }));
+      setUserVote(type);
+    }
   };
 
   const handleAddToCollection = () => {
@@ -59,8 +74,23 @@ console.log(snippet);
 
   const handleVersionChange = (option) => {
     setSelectedVersion(option);
-    // In a real app, fetch the code for this version
     console.log(`Fetching version: ${option.value}`);
+  };
+
+  const handleDelete = (type) => {
+    setDeleteType(type);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    if (deleteType === 'version') {
+      setVersions(versions.filter(v => v.value !== selectedVersion.value));
+      setSelectedVersion(versions[0]);
+    } else if (deleteType === 'snippet') {
+      console.log('Deleting entire snippet');
+      onClose();
+    }
+    setShowDeleteModal(false);
   };
 
   return (
@@ -102,31 +132,9 @@ console.log(snippet);
             <div>
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Code</h3>
-                {/* <div className="w-64  ">
-                  <Select
-
-                    value={selectedVersion}
-                    onChange={handleVersionChange}
-                    options={versions}
-                    isSearchable={false}
-                    className="text-sm"
-             
-
-                    theme={(theme) => ({
-                      ...theme,
-                      colors: {
-                        ...theme.colors,
-                        neutral0: 'var(--bg-color, white)',
-                        neutral80: 'var(--text-color, black)',
-                      },
-                    })}
-                  />
-                   
-                </div> */}
-                 <div className="w-64">
-
-          <CustomSelect options={versions} value={selectedVersion} onChange={handleVersionChange} />
-    </div>
+                <div className="w-64">   
+                  <CustomSelect onChange={handleVersionChange} options={versions} value={selectedVersion} />
+                </div>
               </div>
               <CodeEditor
                 value={isEditing ? editedCode : snippet.code}
@@ -186,19 +194,34 @@ console.log(snippet);
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <button
-                  onClick={handleUpvote}
-                  className={`flex items-center space-x-1 px-3 py-1 rounded-full ${
-                    upvoted
-                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-                  }`}
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                  </svg>
-                  <span>{upvoted ? snippet.likes + 1 : snippet.likes}</span>
-                </button>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => handleVote('up')}
+                    className={`flex items-center space-x-1 px-3 py-1 rounded-lg ${
+                      userVote === 'up'
+                        ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                    }`}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                    </svg>
+                    <span>{votes.up}</span>
+                  </button>
+                  <button
+                    onClick={() => handleVote('down')}
+                    className={`flex items-center space-x-1 px-3 py-1 rounded-lg ${
+                      userVote === 'down'
+                        ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                    }`}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                    <span>{votes.down}</span>
+                  </button>
+                </div>
                 <span className="text-gray-500 dark:text-gray-400">
                   {snippet.comments} comments
                 </span>
@@ -228,7 +251,17 @@ console.log(snippet);
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Version History</h3>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Version History</h3>
+                {snippet.isOwner && selectedVersion.value !== 'current' && (
+                  <button
+                    onClick={() => handleDelete('version')}
+                    className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
+                  >
+                    Delete Version
+                  </button>
+                )}
+              </div>
               <div className="space-y-4">
                 {versions.map((version) => (
                   <div
@@ -254,6 +287,17 @@ console.log(snippet);
                 ))}
               </div>
             </div>
+
+            {snippet.isOwner && (
+              <div className="flex justify-end">
+                <button
+                  onClick={() => handleDelete('snippet')}
+                  className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
+                >
+                  Delete Snippet
+                </button>
+              </div>
+            )}
 
             <div>
               <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Comments</h3>
@@ -292,6 +336,36 @@ console.log(snippet);
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+              {deleteType === 'version' ? 'Delete Version' : 'Delete Snippet'}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              {deleteType === 'version'
+                ? `Are you sure you want to delete version "${selectedVersion.label}"?`
+                : 'Are you sure you want to delete this snippet? This action cannot be undone.'}
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

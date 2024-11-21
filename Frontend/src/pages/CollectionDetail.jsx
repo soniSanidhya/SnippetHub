@@ -75,7 +75,7 @@ export default function CollectionDetail() {
   });
 
   return (
-    <div className="min-h-screen dark:bg-gray-900 bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">{collection.name}</h1>
@@ -84,7 +84,7 @@ export default function CollectionDetail() {
 
         <div className="space-y-8">
           {collection.snippets.map((snippet) => (
-            <div key={snippet.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div key={snippet.id} className="bg-white rounded-lg shadow-md p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-xl font-semibold mb-2">{snippet.title}</h3>

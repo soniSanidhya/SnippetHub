@@ -12,25 +12,24 @@ export default function Profile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle profile update
     console.log('Profile updated:', profile);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="container mx-auto px-4 max-w-2xl">
-        <h1 className="text-3xl font-bold mb-8">Profile Settings</h1>
+        <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Profile Settings</h1>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Profile Picture
               </label>
               <div className="flex items-center space-x-4">
-                <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <svg
-                    className="w-12 h-12 text-gray-400"
+                    className="w-12 h-12 text-gray-400 dark:text-gray-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -45,117 +44,33 @@ export default function Profile() {
                 </div>
                 <button
                   type="button"
-                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                   Change Photo
                 </button>
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Username
-              </label>
-              <input
-                type="text"
-                id="username"
-                value={profile.username}
-                onChange={(e) =>
-                  setProfile({ ...profile, username: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={profile.email}
-                onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="bio"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Bio
-              </label>
-              <textarea
-                id="bio"
-                value={profile.bio}
-                onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                rows="3"
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="website"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Website
-              </label>
-              <input
-                type="url"
-                id="website"
-                value={profile.website}
-                onChange={(e) =>
-                  setProfile({ ...profile, website: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
+            {/* Profile form fields */}
+            {Object.entries(profile).map(([key, value]) => (
+              <div key={key}>
                 <label
-                  htmlFor="github"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  htmlFor={key}
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
-                  GitHub Username
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
                 </label>
                 <input
-                  type="text"
-                  id="github"
-                  value={profile.github}
+                  type={key === 'email' ? 'email' : 'text'}
+                  id={key}
+                  value={value}
                   onChange={(e) =>
-                    setProfile({ ...profile, github: e.target.value })
+                    setProfile({ ...profile, [key]: e.target.value })
                   }
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 />
               </div>
-              <div>
-                <label
-                  htmlFor="twitter"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Twitter Username
-                </label>
-                <input
-                  type="text"
-                  id="twitter"
-                  value={profile.twitter}
-                  onChange={(e) =>
-                    setProfile({ ...profile, twitter: e.target.value })
-                  }
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-            </div>
+            ))}
 
             <div className="flex justify-end">
               <button

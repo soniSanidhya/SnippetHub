@@ -109,5 +109,22 @@ const getSnippets = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, snippets, "All snippets"));
 });
 
+const getSnippetVersions = asyncHandler(async (req, res) => {
+  const { snippetId } = req.params;
+  const versions = await Version.find({ snippet: snippetId });
+  if (!versions) {
+    return res.status(404).json(new ApiResponse(404, null, "No versions found"));
+  }
+  res.status(200).json(new ApiResponse(200, versions, "All versions"));
+})
 
-export { addSnippet , editSnippet , getSnippets};
+const deleteSnippet = asyncHandler(async (req, res) => {
+  const { snippetId } = req.params;
+  const snippet = await Snippet.findById(snippetId);
+  // const snippet = await Snippet.findByIdAndDelete(snippetId);
+  if (!snippet) {
+    return res.status(404).json(new ApiResponse(404, null, "Snippet not found"));
+  }
+  res.status(200).json(new ApiResponse(200, null, "Snippet deleted successfully"));
+})
+export { addSnippet , editSnippet , getSnippets , getSnippetVersions};

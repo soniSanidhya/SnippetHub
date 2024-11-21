@@ -18,7 +18,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
         <div>
           <h2 className="text-center text-3xl font-bold text-gray-900">
@@ -27,8 +27,7 @@ export default function Auth() {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {!isLogin && (
-           
-            <> <div>
+            <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                 Username
               </label>
@@ -42,20 +41,6 @@ export default function Auth() {
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               />
             </div>
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required={!isLogin}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              />
-            </div></>
           )}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">

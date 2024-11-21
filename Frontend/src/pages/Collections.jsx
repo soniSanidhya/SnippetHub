@@ -2,32 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Collections() {
-  const [collections] = useState([
-    {
-      id: 1,
-      name: 'React Hooks',
-      description: 'Collection of useful React hooks',
-      snippetCount: 5,
-      lastUpdated: '2024-02-20',
-      tags: ['react', 'hooks', 'frontend'],
-    },
-    {
-      id: 2,
-      name: 'Database Queries',
-      description: 'Optimized SQL and NoSQL queries',
-      snippetCount: 3,
-      lastUpdated: '2024-02-19',
-      tags: ['sql', 'database', 'backend'],
-    },
-    {
-      id: 3,
-      name: 'CSS Tricks',
-      description: 'Useful CSS snippets and animations',
-      snippetCount: 8,
-      lastUpdated: '2024-02-18',
-      tags: ['css', 'animation', 'frontend'],
-    },
-  ]);
+  const [collections] = useState([/* ... previous collections data ... */]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newCollection, setNewCollection] = useState({
     name: '',

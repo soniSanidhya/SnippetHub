@@ -1,42 +1,113 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CodeEditor from '../components/CodeEditor';
 import SnippetDetail from '../components/SnippetDetail';
 import CategoryFilter from '../components/CategoryFilter';
-
-const fetchData = async () => {
-  const response = await fetch('http://localhost:8000/api/snippet/');
-  const result = await response.json();
-  return { data: result.data }; // Extract data from the API response
-};
 
 export default function Explore() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSnippet, setSelectedSnippet] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedLanguage, setSelectedLanguage] = useState('');
-  const [snippets, setSnippets] = useState([]);
+  
+  // Dummy data for demonstration
+ const snippets = [
+    {
+      id: 1,
+      title: 'React Custom Hook for API Calls',
+      description: 'A reusable custom hook for handling API calls in React applications',
+      language: 'javascript',
+      category: 'frontend',
+      author: 'johndoe',
+      likes: 42,
+      comments: 5,
+      isOwner : true,
+      documentation: `
+# useApi Hook
+
+A custom React hook for handling API calls with built-in loading and error states.
+
+## Usage
+
+\`\`\`javascript
+const { data, loading, error } = useApi('https://api.example.com/data');
+\`\`\`
+
+## Features
+
+- Automatic loading state
+- Error handling
+- Type-safe response
+- Automatic cleanup on unmount
+`,
+      code: `const useApi = (url) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchData().then(result => {
-      // Transform the API data to match your existing component structure
-      const transformedSnippets = result.data.map(snippet => ({
-        id: snippet._id,
-        title: snippet.title,
-        description: snippet.documentation || '', // Use documentation as description
-        language: snippet.language,
-        category: snippet.category[0]?.name || 'uncategorized', // Get first category name
-        author: snippet.owner?.username || 'Unknown',
-        likes: 0, // Add logic to fetch likes if available
-        comments: 0, // Add logic to fetch comments if available
-        isOwner: true, // Add logic to determine ownership
-        code: snippet.currentVersion?.updatedCode || '', // Use current version code
-        documentation: snippet.documentation || ''
-      }));
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const json = await response.json();
+        setData(json);
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [url]);
 
-      setSnippets(transformedSnippets);
-    });
-  }, []);
+  return { data, loading, error };
+};`,
+    },
+    {
+      id: 2,
+      title: 'Python Data Processing Script',
+      description: 'Efficient script for processing large CSV files using pandas',
+      language: 'python',
+      category: 'backend',
+      author: 'janedoe',
+      likes: 38,
+      comments: 3,
+      documentation: `
+# CSV Data Processor
 
+A Python script that efficiently processes large CSV files using pandas.
+
+## Features
+
+- Automatic data cleaning
+- Duplicate removal
+- Group-by operations
+- Statistical analysis
+
+## Example Usage
+
+\`\`\`python
+result = process_csv('data.csv')
+print(result)
+\`\`\`
+`,
+      code: `import pandas as pd
+
+def process_csv(filename):
+    # Read the CSV file
+    df = pd.read_csv(filename)
+    
+    # Perform data cleaning
+    df = df.dropna()
+    df = df.drop_duplicates()
+    
+    # Process the data
+    result = df.groupby('category').agg({
+        'value': ['mean', 'sum', 'count']
+    })
+    
+    return result`,
+    },
+  ];
   const filteredSnippets = snippets.filter((snippet) => {
     const matchesCategory = selectedCategory === 'all' || snippet.category === selectedCategory;
     const matchesLanguage = !selectedLanguage || snippet.language === selectedLanguage;
