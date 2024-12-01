@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
-    "postinstall": "npm install --legacy-peer-deps"
+    "start": "node src/index.js"
+    
   },
   "author": "SanidhyaSoni",
   "license": "ISC",
