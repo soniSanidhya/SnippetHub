@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import { Vote } from "../Models/vote.model.js";
-import { ApiError } from "../utils/apiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { asyncHandler } from "../Utils/asyncHandler.js";
+import { ApiError } from "../Utils/apiError.js";
+import { ApiResponse } from "../Utils/ApiResponse.js";
+
 
 const toggleSnippetVote = asyncHandler(async (req, res) => {
   const { snippetId } = req.params;
