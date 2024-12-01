@@ -57,8 +57,10 @@ const getDashBoardDetails = asyncHandler(async (req, res) => {
         }
     ]);
 
+    
+
     res.status(200).json(
-        new ApiResponse(200, {snippetCount , collectionCount , voteCount , upVoteCount : upVoteCount[0].upVoteCount , views : views[0].totalViews }, "Dashboard details fetched successfully")
+        new ApiResponse(200, {snippetCount : snippetCount || 0 , collectionCount : collectionCount || 0 , voteCount : voteCount || 0 , upVoteCount : upVoteCount[0]?.upVoteCount || 0 , views : views[0]?.totalViews || 0}, "Dashboard details fetched successfully")
     );
 });
 
