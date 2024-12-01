@@ -4,7 +4,7 @@ import { Collection } from "../Models/collection.model.js";
 import { ApiError } from "../Utils/apiError.js";
 import { ApiResponse } from "../Utils/ApiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
-import { User } from "../models/user.model.js";
+import { User } from "../Models/user.model.js";
 
 const createCollection = asyncHandler(async (req, res) => {
   const { name, description } = req.body;

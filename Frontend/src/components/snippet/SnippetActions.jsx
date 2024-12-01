@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Button from "../ui/Button";
-import { showSuccess } from "../../Utils/toast";
+import { showSuccess } from "../../Utils/toast.js";
 import { api } from "../../Utils/axiosHelper.js";
 import { useMutation, useQuery } from "@tanstack/react-query";
 // import api from '../../Utils/axiosHelper.js';

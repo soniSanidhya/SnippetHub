@@ -1,7 +1,7 @@
 import fs, { watch } from "fs";
 import { asyncHandler } from "../Utils/asyncHandler.js";
 import { ApiError } from "../Utils/apiError.js";
-import { User } from "../models/user.model.js";
+import { User } from "../Models/user.model.js";
 import {
   deleteFromCloudinary,
   uploadOnCloudinary,
@@ -9,8 +9,8 @@ import {
 import { ApiResponse } from "../Utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-// import { Vote } from "../models/vote.model.js";
-// import { Video } from "../models/video.model.js";
+// import { Vote } from "../Models/vote.model.js";
+// import { Video } from "../Models/video.model.js";
 // import { subscribe } from "diagnostics_channel";
 import { Snippet } from "../Models/snippet.model.js";
 
