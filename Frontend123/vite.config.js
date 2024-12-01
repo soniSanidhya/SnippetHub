@@ -8,7 +8,7 @@ export default defineConfig({
       "/api": {
         target: "https://snippethub-backend.vercel.app/api/", // Your backend
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },
