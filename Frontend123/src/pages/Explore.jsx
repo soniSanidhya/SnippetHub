@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 import SnippetDetail from "../components/SnippetDetail";
 import CategoryFilter from "../components/CategoryFilter";
-import api from "../utils/axiosHelper";
+import api from "../Utils/axiosHelper";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

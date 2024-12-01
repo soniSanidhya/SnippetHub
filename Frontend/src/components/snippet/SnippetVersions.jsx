@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import CodeEditor from '../CodeEditor';
-import { showSuccess, showError } from '../../utils/toast';
+import { showSuccess, showError } from '../../Utils/toast';
 
 export default function SnippetVersions({ snippet = {}, isOwner }) {
   const [versions, setVersions] = useState(Array.isArray(snippet.versions) ? snippet.versions : []);

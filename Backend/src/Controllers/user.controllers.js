@@ -1,12 +1,12 @@
 import fs, { watch } from "fs";
-import { asyncHandler } from "../utils/asyncHandler.js";
-import { ApiError } from "../utils/apiError.js";
+import { asyncHandler } from "../Utils/asyncHandler.js";
+import { ApiError } from "../Utils/apiError.js";
 import { User } from "../models/user.model.js";
 import {
   deleteFromCloudinary,
   uploadOnCloudinary,
-} from "../utils/cloudinary.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
+} from "../Utils/cloudinary.js";
+import { ApiResponse } from "../Utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 // import { Vote } from "../models/vote.model.js";

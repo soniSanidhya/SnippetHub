@@ -1,8 +1,8 @@
 // Snippet Search Controller
 import mongoose from 'mongoose';
-import { ApiError } from "../utils/apiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from '../utils/asyncHandler.js';
+import { ApiError } from "../Utils/apiError.js";
+import { ApiResponse } from "../Utils/ApiResponse.js";
+import { asyncHandler } from '../Utils/asyncHandler.js';
 
 const searchSnippets = asyncHandler(async (req, res) => {
   // Destructure query parameters from request with default values

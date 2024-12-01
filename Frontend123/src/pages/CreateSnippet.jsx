@@ -2,7 +2,7 @@ import { useState } from 'react';
 import CodeEditor from '../components/CodeEditor';
 import MDEditor from '@uiw/react-md-editor';
 import CustomSelect from '../components/CustomSelect';
-import api from '../utils/axiosHelper';
+import api from '../Utils/axiosHelper';
 import { useMutation } from "@tanstack/react-query";
 
 

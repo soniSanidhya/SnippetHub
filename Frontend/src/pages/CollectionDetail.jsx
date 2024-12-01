@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
-import { api } from "../utils/axiosHelper.js";
+import { api } from "../Utils/axiosHelper.js";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import SnippetDetail from "../components/SnippetDetail.jsx";
-import { showSuccess } from "../utils/toast.js";
+import { showSuccess } from "../Utils/toast.js";
 const fetchCollectionDetails = (collectionId) =>
   api.get(`collection/c/${collectionId}`);
 

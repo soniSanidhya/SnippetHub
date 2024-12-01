@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { showSuccess, showError } from '../../utils/toast';
+import { showSuccess, showError } from '../../Utils/toast';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { api } from '../../utils/axiosHelper';
+import { api } from '../../Utils/axiosHelper';
 
 const fetchComments = (snippetId) => api.get(`comment/s/${snippetId}`);
 const postComment = (snippetId, content) => api.post(`comment/s/${snippetId}`, { content });

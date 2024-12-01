@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { api } from '../utils/axiosHelper';
+import { api } from '../Utils/axiosHelper';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 
@@ -13,7 +13,7 @@ const categories = [
   { id: 'database', name: 'Database' },
   { id: 'devops', name: 'DevOps' },
   { id: 'algorithms', name: 'Algorithms' },
-  { id: 'utils', name: 'Utilities' }
+  { id: 'Utils', name: 'Utilities' }
 ];
 
 export default function CategoryFilter({ selectedCategory, onCategoryChange }) {

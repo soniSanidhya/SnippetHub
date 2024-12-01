@@ -1,7 +1,7 @@
 
 import {Category} from "../Models/category.model.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../Utils/ApiResponse.js";
+import { asyncHandler } from "../Utils/asyncHandler.js";
 
 
 const getAllCategory = asyncHandler(async (req, res) => {

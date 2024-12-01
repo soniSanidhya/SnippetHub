@@ -4,7 +4,7 @@ import CodePreview from "./CodePreview";
 import ReactMarkdown from "react-markdown";
 import Select from "react-select";
 import CustomSelect from "./CustomSelect";
-import api from "../utils/axiosHelper";
+import api from "../Utils/axiosHelper";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchVersions = (snippetId) => api.get(`/snippet/v/${snippetId}`);

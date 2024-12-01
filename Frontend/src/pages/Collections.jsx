@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "../utils/axiosHelper.js";
+import { api } from "../Utils/axiosHelper.js";
 import useAuthStore from "../store/authStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { showSuccess } from "../utils/toast.js";
+import { showSuccess } from "../Utils/toast.js";
 
 const fetchCollections = (username) => api.get(`/collection/${username}`);
 const postCollection = (collection) => api.post("/collection", collection);

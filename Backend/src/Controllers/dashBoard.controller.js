@@ -1,6 +1,6 @@
 import { Snippet } from "../Models/snippet.model.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../Utils/ApiResponse.js";
+import { asyncHandler } from "../Utils/asyncHandler.js";
 import { Collection } from "../Models/collection.model.js";
 import { Vote } from "../Models/vote.model.js";
 

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { ApiError } from "../utils/apiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../Utils/apiError.js";
+import { ApiResponse } from "../Utils/ApiResponse.js";
+import { asyncHandler } from "../Utils/asyncHandler.js";
 import { Comment } from "../Models/comment.model.js";
 import { Snippet } from "../Models/snippet.model.js";
 

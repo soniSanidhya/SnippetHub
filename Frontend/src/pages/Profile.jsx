@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "../components/ui/Input";
-import { api } from "../utils/axiosHelper";
+import { api } from "../Utils/axiosHelper";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 

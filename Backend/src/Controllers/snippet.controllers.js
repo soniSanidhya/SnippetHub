@@ -2,9 +2,9 @@ import { set } from "mongoose";
 import { Category } from "../Models/category.model.js";
 import { Snippet } from "../Models/snippet.model.js";
 import { Version } from "../Models/version.model.js";
-import { ApiError } from "../utils/apiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../Utils/apiError.js";
+import { ApiResponse } from "../Utils/ApiResponse.js";
+import { asyncHandler } from "../Utils/asyncHandler.js";
 
 const addSnippet = asyncHandler(async (req, res) => {
   const { title, code, language, tags, documentation, category, description } =

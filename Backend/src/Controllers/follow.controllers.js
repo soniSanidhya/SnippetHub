@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { Follow } from "../Models/follow.model.js";
-import { ApiError } from "../utils/apiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../Utils/apiError.js";
+import { ApiResponse } from "../Utils/ApiResponse.js";
+import { asyncHandler } from "../Utils/asyncHandler.js";
 
 const addFollower = asyncHandler(async (req, res) => {
     const { userId } = req.params;

@@ -9,7 +9,7 @@ import SnippetComments from './snippet/SnippetComments';
 import SnippetReadme from './snippet/SnippetReadme';
 import SnippetCodeExecution from './snippet/SnippetCodeExecution';
 import useAuthStore from '../store/authStore';
-import { showSuccess, showError } from '../utils/toast';
+import { showSuccess, showError } from '../Utils/toast';
 import { useState } from 'react';
 import SnippetCollection from './snippet/SnippetCollection';
 

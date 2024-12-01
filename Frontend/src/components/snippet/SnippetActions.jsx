@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Button from "../ui/Button";
-import { showSuccess } from "../../utils/toast";
-import { api } from "../../utils/axiosHelper.js";
+import { showSuccess } from "../../Utils/toast";
+import { api } from "../../Utils/axiosHelper.js";
 import { useMutation, useQuery } from "@tanstack/react-query";
-// import api from '../../utils/axiosHelper.js';
+// import api from '../../Utils/axiosHelper.js';
 const fetchUpvotes = (snippetId) => api.get(`vote/upVotes/${snippetId}`);
 const fetchDownvotes = (snippetId) => api.get(`vote/downVotes/${snippetId}`);
 const fetchIsVoted = (snippetId) => api.get(`vote/isVoted/${snippetId}`);
