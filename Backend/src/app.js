@@ -10,7 +10,7 @@ const app = express();
 // Configure CORS options
 const corsOptions = {
   origin: 'https://snippethub-one.vercel.app', // Frontend URL
-  // origin : '*',
+  // origin : 'http://localhost:5173',
   credentials: true,              // Allow credentials (cookies, headers)
 };
 
