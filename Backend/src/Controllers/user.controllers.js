@@ -50,13 +50,16 @@ const registerUser = asyncHandler(async (req, res) => {
     $or: [{ username }, { email }],
   });
 
-
+  
   const user = await User.create({
     username: username.toLowerCase(),
     email,
     password,
   });
-
+  
+  const { refreshToken, accessToken } = await generateRefreshTokenAndAcessToken(
+    user._id
+  );
   // console.log("sent to database");
 
   const createdUser = await User.findById(user._id).select(
@@ -67,8 +70,21 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while regidtering user");
   }
 
-  return res.json(
-    new ApiResponse(200, createdUser, "user Succesfully Registered")
+  const options = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+  };
+
+  return res.status(200)
+  .cookie("accessToken", accessToken, options)
+  .cookie("refreshToken", refreshToken, options)
+  .json(
+    new ApiResponse(200, {
+      user: createdUser,
+      refreshToken,
+      accessToken,
+    }, "user Succesfully Registered")
   );
 });
 

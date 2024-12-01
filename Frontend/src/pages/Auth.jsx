@@ -22,7 +22,7 @@ export default function Auth() {
 
   const from = location.state?.from?.pathname || '/dashboard';
 
-  const {mutate} = useMutation({
+  const {mutate : loginMutation} = useMutation({
     mutationKey : ["login"],
     mutationFn : ()=> postLogin(formData),
     onSuccess : (data)=>{
@@ -32,12 +32,25 @@ export default function Auth() {
     }
   });
 
+  const {mutate : signupMutation} = useMutation({
+    mutationKey : ["signup"],
+    mutationFn : ()=> postSignup(formData),
+    onSuccess : (data)=>{
+      console.log("user signed up successfully",data);
+      login(data.data.data.user , data.data.data.accessToken  );
+      navigate(from, { replace: true });
+    }
+  })
+
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    mutate();
+
+    if (isLogin) loginMutation();
+    else signupMutation();
+
          
     // try {
     //   // Simulate API call
