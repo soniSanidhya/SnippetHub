@@ -1,75 +1,4 @@
-// import { v2 as cloudinary } from "cloudinary";
-// import fs from "fs";
-// import dotenv from "dotenv";
-
-// dotenv.config();
-// // Configuration
-// cloudinary.config({
-//     // cloud_name: "human404",
-//     // api_key: "445422384561518",
-//     // api_secret: "9re6WCoXltvBS2UQURmogzMGDgA"
-
-//     cloud_name: process.env.CLOUD_NAME,
-//     api_key: process.env.API_KEY,
-//     api_secret: process.env.API_SECRET_KEY,
-// });
-
-// const uploadOnCloudinary = async (localFilePath) => {
-//     try {
-//         // // console.log("name ",process.env.CLOUD_NAME);
-//         // // console.log("key ",process.env.API_KEY);
-//         // // console.log("Secret",process.env.API_SECRET_KEY);
-
-//         // console.log(" upload", localFilePath);
-//         // console.log("uploading");
-
-//         if (!localFilePath) return null;
-
-//         const response = await cloudinary.uploader.upload(localFilePath, {
-//             resource_type: "auto",
-//         });
-
-//         // console.log("file is Uploaded on cloudinary", response);
-//         fs.unlinkSync(localFilePath);
-//         return response;
-//     } catch (error) {
-//         // console.log(error);
-
-//         // fs.unlinkSync(localFilePath);
-//         await safeUnlink(localFilePath);
-//         return null;
-//     }
-// };
-
-// const extractPublicId = (url) => {
-//     const parts = url.split("/");
-//     const publicIdWithExtension = parts[parts.length - 1];
-//     const publicId = publicIdWithExtension.split(".")[0];
-//     return publicId;
-// };
-
-// const deleteFromCloudinary = async (url) => {
-//     try {
-//         if (!url) return ;
-//         const publicId = extractPublicId(url);
-//         if (!publicId) return ;
-//         const response = await cloudinary.uploader.destroy(publicId);
-//     } catch (error) {
-//         // console.log(error);
-//     }
-// };
-// const safeUnlink = async (filePath) => {
-//     try {
-//         fs.unlinkSync(filePath);
-//     } catch (error) {
-//         // console.log(`Failed to delete file: ${filePath}`, error);
-//     }
-// };
-
-// export { uploadOnCloudinary, deleteFromCloudinary };
-
-// import { v2 as cloudinary } from "cloudinary";
-import cloudinary from "cloudinary";
+import { v2 as cloudinary } from 'cloudinary';
 import dotenv from "dotenv";
 import stream from "stream";
 
@@ -81,59 +10,117 @@ cloudinary.config({
     api_secret: process.env.API_SECRET_KEY,
 });
 
-const uploadOnCloudinary = async (file) => {
-    console.log("uploading on cloudinary");
+// const uploadOnCloudinary = async (file) => {
+//     console.log("Attempting to upload file to Cloudinary");
 
-    try {
-        if (!file) return null;
+//     return new Promise((resolve, reject) => {
+//         // Set a timeout
+//         const uploadTimeout = setTimeout(() => {
+//             console.error("Cloudinary upload timed out");
+//             reject(new Error("Cloudinary upload timed out"));
+//         }, 30000); // 30 seconds timeout
 
-        // Create a promise to handle the upload
-        return new Promise((resolve, reject) => {
-            const uploadStream = cloudinary.uploader.upload_stream(
-                {
-                    resource_type: "auto",
-                },
-                (error, result) => {
-                    if (error) {
-                        console.error("Cloudinary upload error:", error);
-                        return reject(error);
-                    }
+//         try {
+//             // Validate file
+//             if (!file) {
+//                 clearTimeout(uploadTimeout);
+//                 console.error("No file provided");
+//                 return resolve(null);
+//             }
 
-                    console.log("file is Uploaded on cloudinary", result);
+//             // Ensure file has a buffer
+//             if (!file.buffer) {
+//                 clearTimeout(uploadTimeout);
+//                 console.error("File does not have a buffer property");
+//                 return resolve(null);
+//             }
 
-                    resolve(result);
-                }
-            );
+//             // Create upload stream
+//             const uploadStream = cloudinary.uploader.upload_stream(
+//                 {
+//                     resource_type: "auto",
+//                 },
+//                 (error, result) => {
+//                     // Clear the timeout
+//                     clearTimeout(uploadTimeout);
 
-            // const stream = require('stream');
-            // const stream = require('stream');
-            const bufferStream = new stream.PassThrough();
-            bufferStream.end(file.buffer);
-            bufferStream.pipe(uploadStream);
-        });
-    } catch (error) {
-        console.error("Error in uploadOnCloudinary:", error);
-        return null;
-    }
+//                     if (error) {
+//                         console.error("Cloudinary upload error:", error);
+//                         return reject(error);
+//                     }
+
+//                     if (!result) {
+//                         console.error("No result returned from Cloudinary");
+//                         return reject(new Error("No result from Cloudinary upload"));
+//                     }
+
+//                     console.log("File uploaded successfully:", {
+//                         url: result.url,
+//                         public_id: result.public_id
+//                     });
+
+//                     resolve(result);
+//                 }
+//             );
+
+//             const passthrough = new stream.PassThrough();
+//             passthrough.end(file.buffer);
+//             passthrough.pipe(uploadStream);
+//         } catch (error) {
+//             // Clear the timeout
+//             clearTimeout(uploadTimeout);
+//             console.error("Unexpected error in uploadOnCloudinary:", error);
+//             reject(error);
+//         }
+//     });
+// };
+
+const uploadOnCloudinary = async (fileBuffer, fileName) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { public_id: fileName }, // Optional: specify file name in Cloudinary
+            (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+            }
+        );
+
+        stream.end(fileBuffer);
+    });
 };
 
-const extractPublicId = (url) => {
-    if (!url) return null;
-    try {
-        const parts = url.split("/");
-        const publicIdWithExtension = parts[parts.length - 1];
-        const publicId = publicIdWithExtension.split(".")[0];
-        return publicId;
-    } catch (error) {
-        console.error("Error extracting public ID:", error);
-        return null;
-    }
-};
+function extractCloudinaryPublicId(url) {
+    // Use a regular expression to extract the public ID
+    const match = url.match(/\/v\d+\/(.+?)(?:\.\w+)?$/);
+    
+    // Return the matched public ID if found, otherwise return null
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+
+// const extractPublicId = (url) => {
+//     if (!url) return null;
+//     try {
+//         const parts = url.split("/");
+//         const publicIdWithExtension = parts[parts.length - 1];
+//         const publicId = publicIdWithExtension.split(".")[0];
+//         return publicId;
+//     } catch (error) {
+//         console.error("Error extracting public ID:", error);
+//         return null;
+//     }
+// };
 
 const deleteFromCloudinary = async (url) => {
     try {
-        if (!url) return;
-        const publicId = extractPublicId(url);
+        if (!url) {
+            console.error("No URL provided for deletion");
+            return null;
+        }
+        const publicId = extractCloudinaryPublicId(url);
+
+        console.log("Attempting to delete from Cloudinary:", publicId);
+        
+
         if (!publicId) return;
 
         return await cloudinary.uploader.destroy(publicId);

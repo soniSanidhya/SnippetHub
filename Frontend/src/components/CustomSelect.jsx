@@ -1,16 +1,20 @@
 import React from 'react';
-import Select from 'react-select';
+import CreatableSelect from "react-select/creatable";
 
-const CustomSelect = ({ options, value, onChange, placeholder = 'Select option...' }) => {
+
+
+
+const CustomSelect = ({ options, value, onChange, onCreateOption  , placeholder = 'Select option...' ,isSearchable = false }) => {
   return (
-    <div className="w-full">
-      <Select
+    <div className="w-full ">
+      <CreatableSelect 
         options={options}
         value={value}
         onChange={onChange}
-        isSearchable={false}
+        isSearchable={isSearchable}
+        onCreateOption={onCreateOption}
         placeholder={placeholder}
-        className="text-sm"
+        className="text-base"
         classNamePrefix="select"
         theme={(theme) => ({
           ...theme,
@@ -83,7 +87,7 @@ const CustomSelect = ({ options, value, onChange, placeholder = 'Select option..
             '&:hover': {
               color: 'white',
               backgroundColor: 'transparent',
-              transform: 'translateX(4px)',
+             
               '&::before': {
                 opacity: 1
               }
@@ -147,24 +151,5 @@ const CustomSelect = ({ options, value, onChange, placeholder = 'Select option..
   );
 };
 
-// Example usage:
-const ExampleSelect = () => {
-  const options = [
-    { value: 'en', label: 'English' },
-    { value: 'es', label: 'Spanish' },
-    { value: 'fr', label: 'French' }
-  ];
-  
-  return (
-    <div className="p-4 max-w-sm mx-auto">
-      <ThemedSelect
-        options={options}
-        value={options[0]}
-        onChange={(option) => console.log(option)}
-        placeholder="Select language..."
-      />
-    </div>
-  );
-};
 
 export default CustomSelect;

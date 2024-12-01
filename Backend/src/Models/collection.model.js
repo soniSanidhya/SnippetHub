@@ -1,9 +1,13 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 const collectionSchema = new Schema({
-    title : {
+    name : {
         type: String,
         required: true,
+    },
+    description: {
+        type: String,
+        default: "",
     },
     owner: {
         type: Schema.Types.ObjectId,

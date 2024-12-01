@@ -26,13 +26,19 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
-    coverImage: {
-      type: String,
-    },
-
     bio: {
       type: String,
     },
+    github: {
+      type: String,
+    },
+    linkedin: {
+      type: String,
+    },
+    website: {
+      type: String,
+    },
+    
     password: {
       type: String,
       required: true,

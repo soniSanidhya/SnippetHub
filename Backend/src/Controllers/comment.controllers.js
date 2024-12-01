@@ -48,6 +48,11 @@ const getSnippetComment = asyncHandler(async (req, res) => {
         
     
     // ]);
+   
+    if (!snippet) {
+        throw new ApiError(404, "Snippet not found");
+    }
+   
     const comments = await Comment.find({ snippet: snippet._id }).populate("owner", "username fullName avatar").sort({ createdAt: -1 });
     const commentsCount = await Comment.countDocuments({ snippet: snippet._id }).countDocuments();
     if (!comments) {
@@ -85,12 +90,14 @@ const addComment = asyncHandler(async (req, res) => {
         owner: req.user._id,
     });
 
-    if (!comment) {
+    const uploadedComment = await Comment.findById(comment._id).populate("owner", "username fullName avatar");
+
+    if (!uploadedComment) {
         throw new ApiError(500, "something went wrong while adding coomment");
     }
 
     res.status(200).json(
-        new ApiResponse(200, comment, "Successfully added comment")
+        new ApiResponse(200, uploadedComment, "Successfully added comment")
     );
 });
 

@@ -1,5 +1,7 @@
 import { ThemeProvider } from 'next-themes';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -11,6 +13,7 @@ import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
+import AuthGuard from './components/AuthGuard';
 
 function App() {
   return (
@@ -19,20 +22,68 @@ function App() {
         <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
           <Header />
           <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/create" element={<CreateSnippet />} />
-              <Route path="/collections" element={<Collections />} />
-              <Route path="/collections/:id" element={<CollectionDetail />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/user/:username" element={<UserProfile />} />
-              <Route path="/auth" element={<Auth />} />
-            </Routes>
+            <AnimatePresence mode="wait">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/explore" element={<Explore />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route
+                  path="/create"
+                  element={
+                    <AuthGuard>
+                      <CreateSnippet />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/collections"
+                  element={
+                    <AuthGuard>
+                      <Collections />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/collections/:id"
+                  element={
+                    <AuthGuard>
+                      <CollectionDetail />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <AuthGuard>
+                      <Dashboard />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <AuthGuard>
+                      <Profile />
+                    </AuthGuard>
+                  }
+                />
+                <Route path="/user/:username" element={<UserProfile />} />
+              </Routes>
+            </AnimatePresence>
           </main>
           <Footer />
         </div>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+            className: 'dark:bg-gray-800 dark:text-white',
+            style: {
+              background: 'var(--toast-bg)',
+              color: 'var(--toast-color)',
+            },
+          }}
+        />
       </Router>
     </ThemeProvider>
   );

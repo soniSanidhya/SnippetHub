@@ -1,3 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import './styles/animations.css';
+
+:root {
+  --toast-bg: #ffffff;
+  --toast-color: #1f2937;
+}
+
+[data-theme='dark'] {
+  --toast-bg: #1f2937;
+  --toast-color: #ffffff;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Focus styles */
+:focus {
+  outline: none;
+  @apply ring-2 ring-blue-500 ring-opacity-50;
+}
+
+/* Transition defaults */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Button hover effects */
+button, a {
+  @apply transition-all duration-200;
+}
+
+/* Card hover effects */
+.card-hover {
+  @apply transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg;
+}
+
+/* Input focus effects */
+input, textarea, select {
+  @apply transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+/* Loading skeleton animation */
+.skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700;
+}
+
+/* Page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}

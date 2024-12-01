@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import useAuthStore from '../store/authStore';
+import { api } from '../utils/axiosHelper';
+import { useMutation, useQuery } from '@tanstack/react-query'
+
+const postLogin = (userData)=> api.post("/user/login" , userData )
+
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,27 +14,67 @@ export default function Auth() {
     password: '',
     username: '',
   });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuthStore();
 
-  const handleSubmit = (e) => {
+  const from = location.state?.from?.pathname || '/dashboard';
+
+  const {mutate} = useMutation({
+    mutationKey : ["login"],
+    mutationFn : ()=> postLogin(formData),
+    onSuccess : (data)=>{
+      console.log("user logged in successfully",data);
+      login(data.data.data.user , data.data.data.accessToken  );
+      navigate(from, { replace: true });
+    }
+  });
+
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle authentication
-    console.log('Form submitted:', formData);
-    navigate('/dashboard');
+    setError('');
+    mutate();
+         
+    // try {
+    //   // Simulate API call
+    //   const mockUser = {
+    //     id: '1',
+    //     username: formData.username || 'johndoe',
+    //     email: formData.email,
+    //     name: 'John Doe',
+    //   };
+    //   const mockToken = 'mock-jwt-token';
+
+    //   // In a real app, you would make an API call here
+    //   await new Promise(resolve => setTimeout(resolve, 1000));
+
+    //   login(mockUser, mockToken);
+    //   navigate(from, { replace: true });
+    // } catch (err) {
+    //   setError('Authentication failed. Please try again.');
+    // }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
         <div>
-          <h2 className="text-center text-3xl font-bold text-gray-900">
+          <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white">
             {isLogin ? 'Sign in to your account' : 'Create your account'}
           </h2>
         </div>
+        {error && (
+          <div className="bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-200 px-4 py-3 rounded relative">
+            {error}
+          </div>
+        )}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {!isLogin && (
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Username
               </label>
               <input
@@ -36,14 +82,14 @@ export default function Auth() {
                 name="username"
                 type="text"
                 required={!isLogin}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
               />
             </div>
           )}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Email address
             </label>
             <input
@@ -51,13 +97,13 @@ export default function Auth() {
               name="email"
               type="email"
               required
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Password
             </label>
             <input
@@ -65,7 +111,7 @@ export default function Auth() {
               name="password"
               type="password"
               required
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-700 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
@@ -84,7 +130,7 @@ export default function Auth() {
         <div className="text-center">
           <button
             type="button"
-            className="text-sm text-blue-600 hover:text-blue-500"
+            className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500"
             onClick={() => setIsLogin(!isLogin)}
           >
             {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}

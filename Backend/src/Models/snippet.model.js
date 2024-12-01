@@ -10,6 +10,10 @@ const snippetSchema = new mongoose.Schema({
     type : String,
     required : true
   },
+    description : {
+    type : String,
+    }
+  ,
   documentation : {
     type : String,
   },
@@ -30,10 +34,14 @@ const snippetSchema = new mongoose.Schema({
   currentVersion : {
     type : mongoose.Schema.ObjectId,
     ref : "Version",
-    required : true
+    // required : true
   }, 
+  views : {
+    type : Number,
+    default : 0
+  }
   
 
-});
+} , {timestamps : true});
 
 export const Snippet = mongoose.model("Snippet", snippetSchema);

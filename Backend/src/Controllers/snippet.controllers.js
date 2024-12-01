@@ -7,44 +7,49 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const addSnippet = asyncHandler(async (req, res) => {
-  const { title, code, language, tags, documentation, category } = req.body;
+  const { title, code, language, tags, documentation, category, description } =
+    req.body;
 
   if (!title || !code || !language) {
     throw new ApiError(400, "Please provide all the required fields");
   }
   console.log(category);
   let categ = await Category.findOne({ name: category });
-    console.log(categ);
-  if (categ?.length === 0) {
+  console.log(categ);
+  if (!categ) {
     console.log("Category not found");
-    
+
     categ = await Category.create({ name: category });
   }
 
   const tagsArray = tags.split(",").map((tag) => tag.trim());
 
   console.log(categ);
-  
 
-  const version = await Version.create({
-    // snippet: snippet._id,
-    version: 1.0,
-    updatedCode: code,
-  });
-
-    console.log(categ._id);
+  console.log(categ?._id);
   const snippet = await Snippet.create({
     owner: req.user._id,
     title,
     language,
     documentation,
-    tags : tagsArray,
+    description,
+    tags: tagsArray,
     category: categ._id,
-    currentVersion: version._id,
   });
 
+
+  
+  const version = await Version.create({
+    snippet: snippet._id,
+    version: 1.0,
+    updatedCode: code,
+  });
+
+  snippet.currentVersion = version._id;
+  await snippet.save();
+
   version.snippet = snippet._id;
-    await version.save();
+  await version.save();
 
   if (!snippet) {
     throw new ApiError(500, "Something went wrong while adding snippet");
@@ -56,75 +61,274 @@ const addSnippet = asyncHandler(async (req, res) => {
 });
 
 const editSnippet = asyncHandler(async (req, res) => {
-    const { snippetId } = req.params;
-    const { code, tags , documentation } = req.body;
-
-    if (!snippetId) {
-        throw new ApiError(400, "Snippet Id is required");
-    }
+  const { snippetId } = req.params;
+  const { title , description , code, tags, documentation } = req.body;
 
 
+  console.log("body ",req.body);
+  
 
-    const snippet = await Snippet.findById(snippetId);
-    console.log(snippetId);
+  if (!snippetId) {
+    throw new ApiError(400, "Snippet Id is required");
+  }
+
+  const snippet = await Snippet.findById(snippetId);
+  console.log(snippetId);
+
+  const currentVersion = await Version.findById(snippet.currentVersion);
+  if (!snippet) {
+    throw new ApiError(404, "Snippet not found");
+  }
+
+ 
+
+  let snippetUpdate;
+  if (code !== snippet.currentVersion.updatedCode) {
+
+    console.log("code ",code);
     
-    const currentVersion = await Version.findById(snippet.currentVersion);
-    if (!snippet) {
-        throw new ApiError(404, "Snippet not found");
-    }
 
     const version = await Version.create({
-        snippet: snippet._id,
-        version: parseInt((currentVersion.version + 0.1)*100)/100,
-        updatedCode: code,
+      snippet: snippet._id,
+      version: parseInt((currentVersion.version + 0.1) * 100) / 100,
+      updatedCode: code,
     });
 
-    const snippetUpdate = await Snippet.findByIdAndUpdate(
-        snippetId,
-        {
-            currentVersion: version._id,
-            tags : tags?.split(",").map((tag) => tag.trim()) || snippet.tags,
-            documentation : documentation || snippet.documentation
-        },
-        {
-            new: true,
-        }
-    )
-
-    if (!snippetUpdate) {
-        throw new ApiError(500, "Something went wrong while updating snippet");
-    }
-
-    res.status(200).json(
-        new ApiResponse(200, {snippet , version} , "Snippet successfully updated")
+    snippetUpdate = await Snippet.findByIdAndUpdate(
+      snippetId,
+      {
+        title: title || snippet.title,
+        description: description || snippet.description,
+        currentVersion: version._id,
+        tags: tags?.split(",").map((tag) => tag.trim()) || snippet.tags,
+        documentation: documentation || snippet.documentation,
+      },
+      {
+        new: true,
+      }
     );
-})
+  } else {
+    snippetUpdate = await Snippet.findByIdAndUpdate(
+      snippetId,
+      {
+        title: title || snippet.title,
+        description: description || snippet.description,
+        tags: tags?.split(",").map((tag) => tag.trim()) || snippet.tags,
+        documentation: documentation || snippet.documentation,
+      },
+      {
+        new: true,
+      }
+    );
+  }
+
+  if (!snippetUpdate) {
+    throw new ApiError(500, "Something went wrong while updating snippet");
+  }
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, { snippet, }, "Snippet successfully updated")
+    );
+});
 
 const getSnippets = asyncHandler(async (req, res) => {
-  const snippets = await Snippet.find().populate("currentVersion").populate("category").populate("owner");
+  // const snippets = await Snippet.find().populate("currentVersion").populate("category").populate("owner");
+
+  const snippets = await Snippet.aggregate([
+    {
+      $lookup: {
+        from: "versions",
+        localField: "currentVersion",
+        foreignField: "_id",
+        as: "currentVersion",
+      },
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+        
+      },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "snippet",
+        as: "commentCount",
+        
+      },
+    },
+    {
+      $lookup : {
+        from : "votes",
+        localField : "_id",
+        foreignField : "snippet",
+        as : "upVoteCount",
+        pipeline : [
+          {
+            $match : {
+              isUpVote : true
+            }
+          }
+        ]
+      }
+    },{
+      $lookup : {
+        from : "votes",
+        localField : "_id",
+        foreignField : "snippet",
+        as : "downVoteCount",
+        pipeline : [
+          {
+            $match : {
+              isUpVote : false
+            }
+          }
+        ]
+      }
+    },
+    {
+      $addFields: {
+        owner: { $arrayElemAt: ["$owner", 0] },
+        currentVersion: { $arrayElemAt: ["$currentVersion", 0] },
+
+        
+        voteCount : { $subtract : [{ $size: "$upVoteCount" }, { $size: "$downVoteCount" }] },
+        commentCount : { $size : "$commentCount" }
+      },
+    },
+    {
+      $sort : {
+        voteCount : -1
+      }
+    },
+    {
+      $project : {
+        upVoteCount : 0,
+        downVoteCount : 0,
+      }
+    }
+  ]);
   if (!snippets) {
-    return res.status(404).json(new ApiResponse(404, null, "No snippets found"));
-    
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "No snippets found"));
   }
   res.status(200).json(new ApiResponse(200, snippets, "All snippets"));
 });
 
 const getSnippetVersions = asyncHandler(async (req, res) => {
   const { snippetId } = req.params;
-  const versions = await Version.find({ snippet: snippetId });
+
+  if (!snippetId) {
+    throw new ApiError(400, "Snippet Id is required");
+  }
+
+  const versions = await Version.find({ snippet: snippetId }).sort({ createdAt : -1 });
   if (!versions) {
-    return res.status(404).json(new ApiResponse(404, null, "No versions found"));
+    throw new ApiError(404, "No versions found");
   }
   res.status(200).json(new ApiResponse(200, versions, "All versions"));
-})
+});
 
 const deleteSnippet = asyncHandler(async (req, res) => {
   const { snippetId } = req.params;
   const snippet = await Snippet.findById(snippetId);
   // const snippet = await Snippet.findByIdAndDelete(snippetId);
+
   if (!snippet) {
-    return res.status(404).json(new ApiResponse(404, null, "Snippet not found"));
+    return res
+      .status(404)
+      .json(new ApiResponse(404, null, "Snippet not found"));
   }
-  res.status(200).json(new ApiResponse(200, null, "Snippet deleted successfully"));
-})
-export { addSnippet , editSnippet , getSnippets , getSnippetVersions};
+
+  const versions = await Version.find({ snippet: snippetId });
+
+  if (!versions) {
+    throw new ApiError(404, "No versions found");
+  }
+
+  versions.forEach(async (version) => {
+    await Version.deleteOne({ _id: version._id });
+  });
+
+  const deletedSnippet = await Snippet.deleteOne({ _id: snippetId });
+
+  if (!deletedSnippet) {
+    throw new ApiError(500, "Something went wrong while deleting snippet");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, null, "Snippet deleted successfully"));
+});
+
+const deleteVersion = asyncHandler(async (req, res) => {
+  const { versionId } = req.params;
+
+  const version = await Version.findById(versionId);
+
+  const snippet = await Snippet.findById(version.snippet);
+
+  if (!version || !snippet) {
+    throw new ApiError(404, "Version not found");
+  }
+
+  if (snippet.currentVersion.toString() === versionId.toString()) {
+    const olderVersion = await Version.findOne({
+      snippet: snippet._id,
+      _id: { $ne: versionId },
+    }).sort({ version: -1 });
+    if (!olderVersion) {
+      throw new ApiError(404, "No older version found");
+    }
+    snippet.currentVersion = olderVersion._id;
+    await snippet.save();
+  }
+
+  const deletedVersion = await Version.deleteOne({ _id: versionId });
+
+  if (!deletedVersion) {
+    throw new ApiError(500, "Something went wrong while deleting version");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, null, "Version deleted successfully"));
+});
+
+const getSnippetDetails = asyncHandler(async (req, res) => {
+  const { snippetId } = req.params;
+
+  const snippet = await Snippet.findById(snippetId)
+    .populate("currentVersion")
+    .populate("category")
+    .populate("owner");
+
+  if (!snippet) {
+    throw new ApiError(404, "Snippet not found");
+  }
+
+  res.status(200).json(new ApiResponse(200, snippet, "Snippet details"));
+});
+export {
+  addSnippet,
+  editSnippet,
+  getSnippets,
+  getSnippetVersions,
+  deleteSnippet,
+  deleteVersion,
+};
