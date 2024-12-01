@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:8000", // Your backend
+        target: "https://snippethub-backend.vercel.app/api/", // Your backend
         changeOrigin: true,
         secure: false,
       },
