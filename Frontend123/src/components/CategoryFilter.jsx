@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import api from '../Utils/axiosHelper.js';
+import api from '../utils/axiosHelper.js';
 
 const fetchCategory = () => api.get('/category');
 

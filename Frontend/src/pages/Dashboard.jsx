@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "../Utils/axiosHelper";
+import { api } from "../utils/axiosHelper";
 import SnippetReadme from "../components/snippet/SnippetReadme";
 import MDEditor, { title } from "@uiw/react-md-editor";
-import { showError, showSuccess } from "../Utils/toast";
+import { showError, showSuccess } from "../utils/toast";
 import { InfinitySpin } from "react-loader-spinner";
 
 const fetchSnippet = () => api.get("/user/getSnippets/");

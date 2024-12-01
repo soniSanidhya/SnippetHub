@@ -2,9 +2,9 @@ import { useState } from "react";
 import CodeEditor from "../components/CodeEditor";
 import MDEditor from "@uiw/react-md-editor";
 import CustomSelect from "../components/CustomSelect";
-// import api from '../Utils/axiosHelper.js';
+// import api from '../utils/axiosHelper.js';
 import { useMutation } from "@tanstack/react-query";
-import { api } from "../Utils/axiosHelper.js";
+import { api } from "../utils/axiosHelper.js";
 import Input from "../components/ui/Input.jsx";
 
 const postSnippet = (snippetData) => api.post("/snippet", snippetData);

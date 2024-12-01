@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import { motion } from 'framer-motion';
-import { showSuccess, showError } from '../../Utils/toast';
+import { showSuccess, showError } from '../../utils/toast';
 
 export default function SnippetReadme({ snippet = {}, isOwner , onReadmeChange}) {
   const [isEditing, setIsEditing] = useState(false);

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import CodeEditor from '../components/CodeEditor.jsx';
-import { api } from '../Utils/axiosHelper.js';
+import { api } from '../utils/axiosHelper.js';
 import { useQuery } from '@tanstack/react-query';
 
 const fetchSnippet = () => api.get("/user/getSnippets/");

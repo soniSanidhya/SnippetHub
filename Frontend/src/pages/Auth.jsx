@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import { api } from '../Utils/axiosHelper';
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { api } from '../utils/axiosHelper';
 
 const postLogin = (userData)=> api.post("/user/login" , userData )
 const postSignup = (userData)=> api.post("/user/register" , userData )

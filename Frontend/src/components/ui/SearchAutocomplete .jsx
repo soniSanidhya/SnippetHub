@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
  // Adjust the path according to your project structure
 import { Search } from 'lucide-react';
 import Input from './Input';
-import { api } from '../../Utils/axiosHelper';
+import { api } from '../../utils/axiosHelper';
 import { useQuery } from '@tanstack/react-query';
 
 

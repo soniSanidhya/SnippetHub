@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 import FollowList from "../components/FollowList";
-import { api } from "../Utils/axiosHelper";
+import { api } from "../utils/axiosHelper";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchUser = (username) => api.get(`/user/profile/${username}`);

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import CodeEditor from '../CodeEditor';
-import { showSuccess, showError } from '../../Utils/toast';
-import { api } from '../../Utils/axiosHelper';
+import { showSuccess, showError } from '../../utils/toast';
+import { api } from '../../utils/axiosHelper';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const fetchVersion = (snippet)=> api.get(`/snippet/v/${snippet._id}`);

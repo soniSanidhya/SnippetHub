@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 import SnippetDetail from "../components/SnippetDetail";
 import CategoryFilter from "../components/CategoryFilter";
-import { api } from "../Utils/axiosHelper";
+import { api } from "../utils/axiosHelper";
 import { useQuery } from "@tanstack/react-query";
 import CustomSelect from "../components/CustomSelect";
 import SearchAutocomplete from "../components/ui/SearchAutocomplete ";

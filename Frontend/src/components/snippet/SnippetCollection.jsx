@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import useAuthStore from "../../store/authStore";
-import { api } from "../../Utils/axiosHelper";
-import { showSuccess } from "../../Utils/toast";
+import { api } from "../../utils/axiosHelper";
+import { showSuccess } from "../../utils/toast";
 import { InfinitySpin } from "react-loader-spinner";
 
 const fetchCollections = (username) => api.get(`/collection/${username}`);
