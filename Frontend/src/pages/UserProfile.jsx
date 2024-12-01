@@ -80,8 +80,8 @@ export default function UserProfile() {
     isError: isFollowersError,
     error: followersError,
   } = useQuery({
-    queryKey: ["followers", userProfile?.data.data._id],
-    queryFn: () => fetchFollowers(userProfile?.data.data._id),
+    queryKey: ["followers", userProfile?.data.data?._id],
+    queryFn: () => fetchFollowers(userProfile?.data.data?._id),
     enabled: isProfileSuccess,
     staleTime: 1000 * 60 * 2,
   });

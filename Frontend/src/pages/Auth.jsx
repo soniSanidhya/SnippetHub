@@ -5,6 +5,7 @@ import { api } from '../utils/axiosHelper';
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 const postLogin = (userData)=> api.post("/user/login" , userData )
+const postSignup = (userData)=> api.post("/user/register" , userData )
 
 
 export default function Auth() {

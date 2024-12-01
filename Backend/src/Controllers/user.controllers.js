@@ -34,13 +34,13 @@ const generateRefreshTokenAndAcessToken = async (userId) => {
 
 const registerUser = asyncHandler(async (req, res) => {
   // console.log(req.body);
-  const { username, fullName, password, email } = req.body;
+  const { username, password, email } = req.body;
 
-  console.log(req?.files);
+  console.log(req.body);
 
   if (
-    [fullName, username, email, password].some((el) => el?.trim() === "") ||
-    [fullName, username, email, password].some((el) => el?.trim() === undefined)
+    [ username, email, password].some((el) => el?.trim() === "") ||
+    [ username, email, password].some((el) => el?.trim() === undefined)
   ) {
     throw new ApiError(400, "All feilds are required");
   }
@@ -49,54 +49,10 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExist = await User.findOne({
     $or: [{ username }, { email }],
   });
-  // console.log(userExist);
 
-  // console.log("user doesnot exist");
-  // console.log(req?.files);
-
-  // const avatarFile = req.files?.avatar?.[0];
-  // const coverImageFile = req.files?.coverImage?.[0];
-  // const avatarFile = req.files?.avatar?.[0];
-  // const coverImageFile = req.files?.coverImage?.[0];
-
-  // const avatarLocalPath = req.files?.avatar[0]?.path;
-  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
-
-  // let coverImageFile;
-  // if (
-  //     req.files &&
-  //     Array.isArray(req.files.coverImage) &&
-  //     req.files.coverImage.length > 0
-  // ) {
-  //     coverImageLocalPath = req.files?.coverImage[0]?.path;
-  // }
-
-  // console.log(avatarLocalPath);
-  // console.log(coverImageLocalPath);
-  // console.log(req.files);
-
-  // if (!avatarFile) {
-  //     throw new ApiError(409, "avatar is Required");
-  // }
-
-  // if (userExist) {
-  //     fs.unlinkSync(avatarLocalPath);
-  //     fs.unlinkSync(coverImageLocalPath);
-  //     throw new ApiError(409, "User already exists");
-  // }
-
-  // const avatarUpload = await uploadOnCloudinary(avatarFile);
-  // let coverImageUpload = null;
-  // if (coverImageFile) {
-  //     coverImageUpload = await uploadOnCloudinary(coverImageFile);
-  // }
-  // console.log("Images Uploaded to cloudinary");
-  // console.log(avatar);
-  // console.log(coverImage);
 
   const user = await User.create({
     username: username.toLowerCase(),
-    fullName,
     email,
     password,
   });
@@ -460,66 +416,12 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     // },
   ]);
 
-  //   const channel = await User.aggregate([
-  //     {
-  //       $match: {
-  //         username: username.trim(),
-  //       },
-  //     },
-  //     {
-  //       $lookup: {
-  //         from: "subscriptions",
-  //         localField: "_id",
-  //         foreignField: "channel",
-  //         as: "subscribers",
-  //       },
-  //     },
-  //     {
-  //       $lookup: {
-  //         from: "subscriptions",
-  //         localField: "_id",
-  //         foreignField: "subscriber",
-  //         as: "subscribedTo",
-  //       },
-  //     },
+  console.log(userProfile);
+  
 
-  //     {
-  //       $addFields: {
-  //         channelSubscriberCount: {
-  //           $size: "$subscribers",
-  //         },
-  //         channelSubscribedToCount: {
-  //           $size: "$subscribedTo",
-  //         },
-  //         isSubscribed: {
-  //           $cond: {
-  //             if: userId ? { $in: [userId, "$subscriber.subscriber"] } : false,
-  //             then: true,
-  //             else: false,
-  //           },
-  //         },
-  //       },
-  //     },
-  //     {
-  //       $project: {
-  //         username: 1,
-  //         fullName: 1,
-  //         email: 1,
-  //         avatar: 1,
-  //         coverImage: 1,
-  //         channelSubscriberCount: 1,
-  //         channelSubscribedToCount: 1,
-  //         isSubscribed: 1,
-  //         createdAt: 1,
-  //         subscribers: 1,
-  //         subscribedTo: 1,
-  //       },
-  //     },
-  //   ]);
+ 
 
-  // console.log(channel);
-
-  if (!userProfile) {
+  if (userProfile.length === 0) {
     throw new ApiError(404, "channel does not exist");
   }
 
