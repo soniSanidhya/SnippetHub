@@ -9,16 +9,11 @@ const toggleSnippetVote = asyncHandler(async (req, res) => {
   const { snippetId } = req.params;
   let { isUpVote = false } = req.body;
   isUpVote = isUpVote === true || isUpVote === "true";
-  //TODO: toggle like on video
 
-  // console.log("entered toggle like" , isLiked);
 
   if (!snippetId) {
     throw new ApiError(400, "Video id is missing");
   }
-  // isLiked = isLiked === "true" ? true : false;
-
-  // console.log("isLiked: ", isLiked);
 
   const votePrev = await Vote.find({
     snippet: snippetId,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Input from "../components/ui/Input";
 import { api } from "../utils/axiosHelper";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import useAuthStore from "../store/authStore";
 
 
 const patchProfile = (profile) => api.patch("user/update", profile);
@@ -16,6 +17,7 @@ const patchAvatar = (avatar) =>
   const getUserProfile = () => api.get("user");
 
 export default function Profile() {
+  const {user , updateUser} = useAuthStore();
   const [profile, setProfile] = useState({
     username: "",
     fullName : "",

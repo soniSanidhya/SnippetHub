@@ -452,96 +452,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     );
 });
 
-const getLikedVideos = asyncHandler(async (req, res) => {
-  // const likedVideos = await Vote.find({
-  //     video: { $ne: null },
-  //     likedBy: req?.user?._id,
-  // })
-  //     .populate("video")
-  //     .populate("owner", "username avatar fullName");
 
-  const likedVideos = await Vote.aggregate([
-    {
-      $match: {
-        likedBy: new mongoose.Types.ObjectId(req.user._id),
-        video: { $ne: null },
-        isLiked: true,
-      },
-    },
-    {
-      $project: {
-        video: 1,
-        _id: 0,
-      },
-    },
-    {
-      $lookup: {
-        from: "videos",
-        localField: "video",
-        foreignField: "_id",
-        as: "video",
-        pipeline: [
-          {
-            $lookup: {
-              from: "users",
-              localField: "owner",
-              foreignField: "_id",
-              as: "owner",
-              pipeline: [
-                {
-                  $project: {
-                    avatar: 1,
-                    username: 1,
-                  },
-                },
-              ],
-            },
-          },
-          {
-            $addFields: {
-              owner: {
-                $first: "$owner",
-              },
-            },
-          },
-        ],
-      },
-    },
-    {
-      $addFields: {
-        video: {
-          $first: "$video",
-        },
-      },
-    },
-    {
-      $project: {
-        _id: "$video._id",
-        videoFile: "$video.videoFile",
-        thumbnail: "$video.thumbnail",
-        title: "$video.title",
-        description: "$video.description",
-        duration: "$video.duration",
-        views: "$video.views",
-        isPublished: "$video.isPublished",
-        owner: "$video.owner",
-        createdAt: "$video.createdAt",
-        updatedAt: "$video.updatedAt",
-        __v: "$video.__v",
-      },
-    },
-  ]);
-
-  if (!likedVideos) {
-    throw new ApiError(404, "No liked snippets found");
-  }
-
-  res
-    .status(200)
-    .json(
-      new ApiResponse(200, likedVideos, "successfully fetched liked videos")
-    );
-});
 
 const getMySnippets = asyncHandler(async (req, res) => {
   const snippets = await Snippet.aggregate([
@@ -665,6 +576,5 @@ export {
   updateAccountDetails,
   updateAvatar,
   getUserChannelProfile,
-  getLikedVideos,
   getMySnippets,
 };
