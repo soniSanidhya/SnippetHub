@@ -129,7 +129,7 @@ export default function Explore() {
                       snippet.owner?.avatar ?
                       <img
                         src={snippet.owner?.avatar}
-                        alt={snippet.owner?.fullName || user?.username}
+                        alt={snippet.owner?.fullName || snippet.owner?.username}
                         className="w-8 h-8 rounded-full"/>
                       :
                       <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
