@@ -125,9 +125,18 @@ export default function Explore() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                <span className="text-xs">
-                  {snippet.owner.username?.charAt(0).toUpperCase()}
-                </span>
+              {
+                      snippet.owner?.avatar ?
+                      <img
+                        src={snippet.owner?.avatar}
+                        alt={snippet.owner?.fullName || user?.username}
+                        className="w-8 h-8 rounded-full"/>
+                      :
+                      <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                      <span className="text-sm font-medium">
+                        {snippet.owner?.fullName?.charAt(0) || snippet.owner?.username?.charAt(0)}
+                      </span>
+                    </div>}
               </div>
               <span>{snippet.owner.username}</span>
             </Link>

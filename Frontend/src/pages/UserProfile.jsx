@@ -132,9 +132,9 @@ export default function UserProfile() {
                       <img
                         src={user?.avatar}
                         alt={user?.fullName || user?.username}
-                        className="w-8 h-8 rounded-full"/>
+                        className="w-full h-full rounded-full"/>
                       :
-                      <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                      <div className="w-1/2 h-1/2 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
                       <span className="text-sm font-medium">
                         {user?.fullName?.charAt(0) || user?.username?.charAt(0)}
                       </span>
