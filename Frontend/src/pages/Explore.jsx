@@ -4,12 +4,24 @@ import CodeEditor from "../components/CodeEditor";
 import SnippetDetail from "../components/SnippetDetail";
 import CategoryFilter from "../components/CategoryFilter";
 import { api } from "../utils/axiosHelper";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import CustomSelect from "../components/CustomSelect";
 import SearchAutocomplete from "../components/ui/SearchAutocomplete ";
 import { useInView } from "react-intersection-observer";
 import { InfinitySpin } from "react-loader-spinner";
-const fetchQuerySnippets = (query) => api.get("/search", { params: query });
+const fetchQuerySnippets = ({
+  pageParam,
+  query,
+  language,
+  category,
+  sortBy,
+  sortOrder,
+}) => {
+  console.log("pages : ", pageParam);
+  return api.get("/search", {
+    params: { page: pageParam, query, language, category, sortBy, sortOrder },
+  });
+};
 
 const fetchSnippet = () => api.get("/snippet");
 
@@ -37,32 +49,45 @@ export default function Explore() {
     isLoading: isSearchLoading,
     isError: isSearchError,
     error: searchError,
+    fetchNextPage: fetchNextSearchPage,
     refetch: fetchSearch,
-  } = useQuery({
+    hasNextPage,
+  } = useInfiniteQuery({
     queryKey: ["searchResults", searchQuery],
-    queryFn: () =>
+    queryFn: ({ pageParam }) =>
       fetchQuerySnippets({
         query: searchQuery,
         language: selectedLanguage,
         category: selectedCategory,
         sortBy: selectedSort,
         sortOrder: selectedOrder,
+        pageParam: pageParam,
       }),
-    enabled: false,
-    staleTime: 1000 * 60,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.data.length === 0) return undefined;
+      return allPages.length + 1;
+    },
   });
 
+  console.log(searchResults);
+
+  console.log("has more", hasNextPage);
+
   useEffect(() => {
-    if (inView) {
+    if (inView && hasNextPage) {
+      console.log(hasNextPage);
+
       console.log("fetching in view");
-
-      fetchSearch();
+      fetchNextSearchPage();
     }
-  }, [inView, fetchSearch]);
+  }, [inView, searchQuery]);
 
   useEffect(() => {
-    fetchSearch();
-    console.log("something changed");
+    
+      console.log("something changed");    
+      fetchSearch();
+    
   }, [selectedCategory, selectedLanguage, selectedSort, selectedOrder]);
 
   // const filteredSnippets = data?.data?.data?.filter((snippet) => {
@@ -86,10 +111,12 @@ export default function Explore() {
       className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
       onClick={() => setSelectedSnippet(snippet)}
     >
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center max-w-full mb-4">
         <div>
-          <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-            {snippet.title}
+          <h3 className="text-xl text-wrap max-w-full font-semibold mb-2 text-gray-900 dark:text-white">
+            {snippet?.title.length > 30
+              ? snippet.title.slice(0, 30) + "..."
+              : snippet.title}
           </h3>
           <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
             <Link
@@ -108,17 +135,19 @@ export default function Explore() {
             <span>{new Date(snippet.createdAt).toLocaleDateString()}</span>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-sm">
-            {snippet.language}
-          </span>
-          <span className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm">
-            {snippet.category[0].name}
-          </span>
-        </div>
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-sm">
+          {snippet.language}
+        </span>
+        <span className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm">
+          {snippet.category[0].name}
+        </span>
       </div>
       <p className="text-gray-600 dark:text-gray-300 mb-4">
-        {snippet.description}
+        {snippet?.description?.length > 100
+          ? snippet.description.slice(0, 100) + "..."
+          : snippet.description}
       </p>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -167,23 +196,10 @@ export default function Explore() {
     </div>
   );
 
-  if (isSearchLoading) {
-    return (
-      <div className="w-full h-[90vh] flex justify-center items-center">
-        <div>
-          <InfinitySpin
-            visible={true}
-            width="200"
-            color="#4F46E5"
-            ariaLabel="infinity-spin-loading"
-          />
-        </div>
-      </div>
-    );
-  }
+  
 
   if (isSearchError) {
-    return <div>{error.message}</div>;
+    return <div>{error?.message}</div>;
   }
 
   return (
@@ -322,10 +338,26 @@ export default function Explore() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {searchResults?.data?.data?.snippets?.map(snippetCard)}
-          <div ref={ref}></div>
+       {isSearchLoading ?  (
+      <div className="w-full h-[90vh] flex justify-center items-center">
+        <div>
+          <InfinitySpin
+            visible={true}
+            width="200"
+            color="#4F46E5"
+            ariaLabel="infinity-spin-loading"
+          />
         </div>
+      </div>
+    )
+   : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {searchResults?.pages?.map((page) =>
+            (page?.data?.data?.snippets ?? []).map((snippet) =>
+              snippetCard(snippet)
+            )
+          )}
+          <div ref={ref}></div>
+        </div>}
 
         {selectedSnippet && (
           <SnippetDetail

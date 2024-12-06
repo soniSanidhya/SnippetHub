@@ -103,7 +103,7 @@ export default function SnippetDetail({ snippet = {}, onClose }) {
           <div className="border-t border-gray-200 flex justify-between dark:border-gray-700 pt-6">
             <SnippetActions snippet={snippet} />
           
-            <SnippetCollection snippet={snippet} />
+            { isAuthenticated && <SnippetCollection snippet={snippet} />}
               </div>
 
           <div className="border-t border-gray-200 dark:border-gray-700 pt-6">

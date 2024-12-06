@@ -17,8 +17,8 @@ const SnippetCollection = ({ snippet }) => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["collections", user.username],
-    queryFn: () => fetchCollections(user.username),
+    queryKey: ["collections", user?.username],
+    queryFn: () => fetchCollections(user?.username),
     staleTime: 1000 * 60 * 2,
   });
 
