@@ -4,6 +4,7 @@ import CodeEditor from "../components/CodeEditor";
 import FollowList from "../components/FollowList";
 import { api } from "../utils/axiosHelper";
 import { useQuery } from "@tanstack/react-query";
+import { InfinitySpin } from "react-loader-spinner";
 
 const fetchUser = (username) => api.get(`/user/profile/${username}`);
 const fetchFollowers = (userId) => api.get(`/follow/${userId}`);
@@ -105,7 +106,16 @@ export default function UserProfile() {
     }
   }, [userProfile]);
 
-  if (isProfileLoading) return <div>Loading...</div>;
+  if (isProfileLoading) return   <div className="w-full h-[90vh] flex justify-center items-center">
+  <div>
+    <InfinitySpin
+      visible={true}
+      width="200"
+      color="#4F46E5"
+      ariaLabel="infinity-spin-loading"
+    />
+  </div>
+</div>;
   if (isProfileError) return <div>Error: {profileError.message}</div>;
 
   return (

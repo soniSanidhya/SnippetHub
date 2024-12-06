@@ -4,6 +4,7 @@ import { api } from "../utils/axiosHelper.js";
 import useAuthStore from "../store/authStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { showSuccess } from "../utils/toast.js";
+import { InfinitySpin } from "react-loader-spinner";
 
 const fetchCollections = (username) => api.get(`/collection/${username}`);
 const postCollection = (collection) => api.post("/collection", collection);
@@ -66,7 +67,16 @@ export default function Collections() {
     createCollectionMutation(newCollection);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return   <div className="w-full h-[90vh] flex justify-center items-center">
+  <div>
+    <InfinitySpin
+      visible={true}
+      width="200"
+      color="#4F46E5"
+      ariaLabel="infinity-spin-loading"
+    />
+  </div>
+</div>;
   if (isError) return <div>Error: {error.message}</div>;
 
   return (

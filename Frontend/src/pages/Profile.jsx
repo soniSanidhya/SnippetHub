@@ -3,6 +3,7 @@ import Input from "../components/ui/Input";
 import { api } from "../utils/axiosHelper";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuthStore from "../store/authStore";
+import { InfinitySpin } from "react-loader-spinner";
 
 const patchProfile = (profile) => api.patch("user/update", profile);
 
@@ -84,7 +85,16 @@ export default function Profile() {
     console.log("avatar in change", e.target.files[0]);
   };
 
-  if(isLoading)  return <div>Loading...</div>
+  if(isLoading)  return   <div className="w-full h-[90vh] flex justify-center items-center">
+  <div>
+    <InfinitySpin
+      visible={true}
+      width="200"
+      color="#4F46E5"
+      ariaLabel="infinity-spin-loading"
+    />
+  </div>
+</div>
   if(isError) return <div>Error: {error.message}</div>
 
 
