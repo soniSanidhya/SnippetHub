@@ -10,22 +10,35 @@ import SnippetReadme from './snippet/SnippetReadme';
 import SnippetCodeExecution from './snippet/SnippetCodeExecution';
 import useAuthStore from '../store/authStore';
 import { showSuccess, showError } from '../utils/toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SnippetCollection from './snippet/SnippetCollection';
+import { api } from '../utils/axiosHelper.js';
+import { useMutation } from '@tanstack/react-query';
+
+const postSnippetView =  (snippetId) => api.post(`/snippet/view/${snippetId}`);
 
 export default function SnippetDetail({ snippet = {}, onClose }) {
   const { isAuthenticated, user } = useAuthStore();
   const isOwner = isAuthenticated && user?.id === snippet?.author?.id;
   
-  const handleDelete = async () => {
-    try {
-      // API call would go here
-      showSuccess('Snippet deleted successfully');
-      onClose();
-    } catch (error) {
-      showError('Failed to delete snippet');
-    }
-  };
+  // const handleDelete = async () => {
+  //   try {
+  //     // API call would go here
+  //     showSuccess('Snippet deleted successfully');
+  //     onClose();
+  //   } catch (error) {
+  //     showError('Failed to delete snippet');
+  //   }
+  // };
+
+  const {mutate : postView} = useMutation({
+    mutationFn: ()=> postSnippetView(snippet?._id),
+  });
+
+  useEffect(() => {
+    postView();
+  }, [snippet]);
+ 
 
   
 
@@ -48,14 +61,14 @@ export default function SnippetDetail({ snippet = {}, onClose }) {
             <SnippetMetadata snippet={snippet} />
           </div>
           <div className="flex items-center space-x-4">
-            {isOwner && (
+            {/* {isOwner && (
               <button
                 onClick={handleDelete}
                 className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
               >
                 Delete
               </button>
-            )}
+            )} */}
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"

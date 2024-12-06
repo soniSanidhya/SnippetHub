@@ -270,12 +270,12 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     req.user?._id,
     {
       $set: {
-        fullName: fullName || user.fullName,
+        fullName: fullName ,
         email: email || user.email,
-        website: website || user.website,
-        bio: bio || user.bio,
-        github: github || user.github,
-        linkedin: linkedin || user.linkedin,
+        website: website ,
+        bio: bio ,
+        github: github ,
+        linkedin: linkedin ,
         avatar: avatar || user.avatar,
       },
     },

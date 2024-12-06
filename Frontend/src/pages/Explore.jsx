@@ -219,7 +219,7 @@ export default function Explore() {
             Explore Snippets
           </h1>
           <div className="space-y-4">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 max-sm:flex-col max-sm:items-start">
               <div className="w-full flex border   border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg ">
                 {/* <input
                   type="text"
@@ -242,17 +242,8 @@ export default function Explore() {
                   fetchSearch={fetchSearch}
                 />
               </div>
-              {/* <select
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
-                className="p-2 flex-[20%] border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              >
-                <option value="">All Languages</option>
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="java">Java</option>
-                <option value="cpp">C++</option>
-              </select> */}
+            
+              <div className="flex gap-4"> 
               <div className="flex-[20%]">
                 <CustomSelect
                   onChange={(value) => {
@@ -338,6 +329,7 @@ export default function Explore() {
                     { value: "leastViewed", label: "Least Viewed" },
                   ]}
                 />
+              </div>
               </div>
             </div>
             <CategoryFilter

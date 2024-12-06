@@ -11,8 +11,8 @@ export default function FollowList({ type, users, onClose }) {
 
   const filteredUsers = users.filter(user => 
 
-    user?.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user?.fullName.toLowerCase().includes(searchQuery.toLowerCase()) 
+    user?.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user?.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) 
  
   )
 

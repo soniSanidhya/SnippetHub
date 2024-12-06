@@ -2,64 +2,22 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 import FollowList from "../components/FollowList";
-import { api } from "../utils/axiosHelper";
-import { useQuery } from "@tanstack/react-query";
+import { api } from "../utils/axiosHelper.js";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { InfinitySpin } from "react-loader-spinner";
+import useAuthStore from "../store/authStore.js";
 
+const postFollow = (userId) => api.post(`/follow/${userId}`);
+// const postUnfollow = (userId) => api.post(`/follow/un/${userId}`);
 const fetchUser = (username) => api.get(`/user/profile/${username}`);
 const fetchFollowers = (userId) => api.get(`/follow/${userId}`);
 const fetchFollowing = (userId) => api.get(`/follow/following/${userId}`);
+const fetchIsFollowing = (userId) => api.get(`/follow/isFollowing/${userId}`);
 
 export default function UserProfile() {
   const { username } = useParams();
-  const [user, setUser] = useState({
-    username: username,
-    name: "John Doe",
-    bio: "Full-stack developer passionate about React and Node.js",
-    joinedDate: "2023-01-15",
-    website: "https://johndoe.dev",
-    github: "johndoe",
-    linkedin: "john-doe",
-    stats: {
-      snippets: 25,
-      collections: 8,
-      followers: 156,
-      following: 89,
-    },
-    recentSnippets: [
-      {
-        id: 1,
-        title: "React Custom Hook for API Calls",
-        description: "A reusable custom hook for handling API calls",
-        language: "javascript",
-        code: `const useApi = (url) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url);
-        const json = await response.json();
-        setData(json);
-        setLoading(false);
-      } catch (err) {
-        setError(err);
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [url]);
-
-  return { data, loading, error };
-};`,
-        createdAt: "2024-02-20",
-        likes: 42,
-        views: 156,
-      },
-    ],
-  });
+  const { user: loggedInUser, isAuthenticated } = useAuthStore();
+  const [user, setUser] = useState(null);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
 
@@ -98,6 +56,29 @@ export default function UserProfile() {
     staleTime: 1000 * 60 * 2,
   });
 
+  const { data: isFollowingData } = useQuery({
+    queryKey: ["isFollowing", userProfile?.data.data._id],
+    queryFn: () => fetchIsFollowing(userProfile?.data.data._id),
+    enabled: isProfileSuccess && isAuthenticated,
+    staleTime: 1000 * 60 * 2,
+  });
+
+  console.log("Is Following", isFollowingData);
+  const queryClient = useQueryClient();
+  const { mutate: followUser } = useMutation({
+    mutationFn: () => postFollow(userProfile?.data?.data?._id),
+    onSuccess: () => {
+      // refetch the followers
+      queryClient.setQueryData( ["isFollowing", userProfile?.data.data._id] , {data : {data : isFollowingData?.data?.data ? false : true}});  
+      // queryClient.setQueryData( ["followers", userProfile?.data.data?._id] , {data : {data : {followerCount : isFollowingData?.data?.data ? followers?.data.data.followerCount - 1 : followers?.data.data.followerCount + 1 , followers : isFollowingData?.data?.data ? followers?.data?.data?.filter(f => f._id !== loggedInUser._id ) :  [...followers?.data.data.followers , loggedInUser]}}});
+      queryClient.invalidateQueries(["followers", userProfile?.data.data?._id]);
+      console.log("Followed");
+
+    },
+  });
+
+  
+
   useEffect(() => {
     if (isProfileSuccess) {
       console.log(userProfile.data.data);
@@ -106,16 +87,19 @@ export default function UserProfile() {
     }
   }, [userProfile]);
 
-  if (isProfileLoading) return   <div className="w-full h-[90vh] flex justify-center items-center">
-  <div>
-    <InfinitySpin
-      visible={true}
-      width="200"
-      color="#4F46E5"
-      ariaLabel="infinity-spin-loading"
-    />
-  </div>
-</div>;
+  if (isProfileLoading)
+    return (
+      <div className="w-full h-[90vh] flex justify-center items-center">
+        <div>
+          <InfinitySpin
+            visible={true}
+            width="200"
+            color="#4F46E5"
+            ariaLabel="infinity-spin-loading"
+          />
+        </div>
+      </div>
+    );
   if (isProfileError) return <div>Error: {profileError.message}</div>;
 
   return (
@@ -127,31 +111,40 @@ export default function UserProfile() {
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                  {
-                      user?.avatar ?
+                    {user?.avatar ? (
                       <img
                         src={user?.avatar}
                         alt={user?.fullName || user?.username}
-                        className="w-full h-full rounded-full"/>
-                      :
+                        className="w-full h-full rounded-full"
+                      />
+                    ) : (
                       <div className="w-1/2 h-1/2 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                      <span className="text-sm font-medium">
-                        {user?.fullName?.charAt(0) || user?.username?.charAt(0)}
-                      </span>
-                    </div>}
+                        <span className="text-sm font-medium">
+                          {user?.fullName?.charAt(0) ||
+                            user?.username?.charAt(0)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {user.fullName}
+                      {user.fullName || user.username}
                     </h1>
                     <p className="text-gray-600 dark:text-gray-300">
                       @{user.username}
                     </p>
                   </div>
                 </div>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                  Follow
-                </button>
+
+                {
+                  <button
+                    disabled={!isAuthenticated}
+                    onClick={followUser}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    { isFollowingData?.data?.data ? "Unfollow" : "Follow" }
+                  </button>
+                }
               </div>
 
               <p className="text-gray-700 dark:text-gray-300 mb-4">
@@ -296,10 +289,10 @@ export default function UserProfile() {
                   className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
                 >
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    {snippet.title}
+                    {snippet?.title?.length > 30 ? snippet.title.slice(0, 30) + "..." : snippet.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    {snippet.description}
+                    {snippet.description?.length > 100 ? snippet.description.slice(0, 100) + "..." : snippet.description}
                   </p>
                   <CodeEditor
                     value={snippet?.currentVersion.updatedCode}

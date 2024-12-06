@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Input from "../components/ui/Input";
-import { api } from "../utils/axiosHelper";
+import { api } from "../utils/axiosHelper.js";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import useAuthStore from "../store/authStore";
+import useAuthStore from "../store/authStore.js";
 import { InfinitySpin } from "react-loader-spinner";
 
 const patchProfile = (profile) => api.patch("user/update", profile);
@@ -20,15 +20,7 @@ const getUserProfile = () => api.get("user");
 
 export default function Profile() {
   const { user, updateUser } = useAuthStore();
-  const [profile, setProfile] = useState({
-    username: "",
-    fullName: "",
-    email: "",
-    bio: "",
-    website: "",
-    github: "",
-    twitter: "",
-  });
+  
 
   const [avatar, setAvatar] = useState(null);
 
@@ -56,6 +48,16 @@ export default function Profile() {
     queryKey: ["userProfile"],
     queryFn: getUserProfile,
     
+  });
+
+  const [profile, setProfile] = useState({
+    username: userProfile?.data.data?.username||"",
+    fullName: userProfile?.data.data?.fullName||"", 
+    email: userProfile?.data.data?.email||"",
+    bio: userProfile?.data.data?.bio||"",
+    website: userProfile?.data.data?.website||"",
+    github: userProfile?.data.data?.github||"",
+    twitter: userProfile?.data.data?.twitter||"",
   });
 
   console.log("userProfile", userProfile);
@@ -176,7 +178,7 @@ export default function Profile() {
               <input
                 type="text"
                 id="fullName"
-                value={profile.fullName || userProfile?.data.data.fullName}
+                value={profile.fullName }
                 onChange={(e) =>
                   setProfile({ ...profile, fullName: e.target.value })
                 }
@@ -194,7 +196,7 @@ export default function Profile() {
               <input
                 type="email"
                 id="email"
-                value={profile.email || userProfile?.data.data.email}
+                value={profile.email }
                 onChange={(e) =>
                   setProfile({ ...profile, email: e.target.value })
                 }
@@ -211,7 +213,7 @@ export default function Profile() {
               <input
                 type="text"
                 id="bio"
-                value={profile.bio || userProfile?.data.data.bio}
+                value={profile.bio }
                 onChange={(e) =>
                   setProfile({ ...profile, bio: e.target.value })
                 }
@@ -228,7 +230,7 @@ export default function Profile() {
               <input
                 type="text"
                 id="website"
-                value={profile.website || userProfile?.data.data.website}
+                value={profile.website }
                 onChange={(e) =>
                   setProfile({ ...profile, website: e.target.value })
                 }
@@ -245,7 +247,7 @@ export default function Profile() {
               <input
                 type="text"
                 id="github"
-                value={profile.github || userProfile?.data.data.github}
+                value={profile.github }
                 onChange={(e) =>
                   setProfile({ ...profile, github: e.target.value })
                 }
@@ -262,7 +264,7 @@ export default function Profile() {
               <input
                 type="text"
                 id="twitter"
-                value={profile.twitter || userProfile?.data.data.twitter}
+                value={profile.twitter }
                 onChange={(e) =>
                   setProfile({ ...profile, twitter: e.target.value })
                 }

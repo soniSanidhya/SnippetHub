@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import useAuthStore from "../store/authStore.js";
 
 export default function Home() {
+
+  const { user, isAuthenticated } = useAuthStore();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -15,7 +19,7 @@ export default function Home() {
           </p>
           <div className="flex justify-center space-x-4">
             <Link
-              to="/auth"
+              to={isAuthenticated ? "/explore" : "/auth"}
               className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
             >
               Get Started

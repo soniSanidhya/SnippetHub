@@ -15,17 +15,29 @@ const addFollower = asyncHandler(async (req, res) => {
        throw new ApiError(400, "You can't follow yourself");
     }
 
-    const follow = await Follow.create({
+    const isFollowing = await Follow.exists({follower : req.user._id , user : userId});
+
+    let follow;
+    if (isFollowing) {
+
+        follow = await Follow.findOneAndDelete({
+            follower: req.user._id,
+            user: userId
+        })
+     
+}else {
+    follow = await Follow.create({
         follower: req.user._id,
         user: userId
     })
+}
 
     if (!follow) {
         throw new ApiError(500, "Something went wrong while following user");
     }
 
     res.status(201).json(
-      new ApiResponse(201, follow, "User successfully followed")
+      new ApiResponse(201, follow, "successfully followed user")
     )
 })
 

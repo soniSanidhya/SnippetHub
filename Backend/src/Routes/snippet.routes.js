@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { addSnippet, deleteSnippet, deleteVersion, editSnippet, getSnippets, getSnippetVersions } from '../Controllers/snippet.controllers.js';
+import { addSnippet, addView, deleteSnippet, deleteVersion, editSnippet, getSnippets, getSnippetVersions } from '../Controllers/snippet.controllers.js';
 import { verifyJWT } from '../Middleware/auth.middleware.js';
 
 const router = Router() 
@@ -16,6 +16,7 @@ router.route('/:snippetId').delete(verifyJWT , deleteSnippet );
 
 router.route('/v/:versionId').delete(verifyJWT , deleteVersion );
 
+router.route('/view/:snippetId').post(addView);
 
 
 export default router

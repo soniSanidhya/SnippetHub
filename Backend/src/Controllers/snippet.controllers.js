@@ -324,6 +324,21 @@ const getSnippetDetails = asyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, snippet, "Snippet details"));
 });
+
+const addView = asyncHandler(async (req, res) => {
+  const { snippetId } = req.params;
+
+  const snippet = await Snippet.findById(snippetId);
+
+  if (!snippet) {
+    throw new ApiError(404, "Snippet not found");
+  }
+
+  snippet.views += 1;
+  await snippet.save();
+
+  res.status(200).json(new ApiResponse(200, snippet, "View added"));
+})
 export {
   addSnippet,
   editSnippet,
@@ -331,4 +346,5 @@ export {
   getSnippetVersions,
   deleteSnippet,
   deleteVersion,
+  addView
 };

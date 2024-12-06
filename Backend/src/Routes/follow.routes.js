@@ -18,7 +18,7 @@ router.use(verifyJWT);
 
 router.route("/:userId").post(addFollower);
 
-router.route("/isFollowing/:userId").post(isFollowing);
+router.route("/isFollowing/:userId").get(isFollowing);
 
 router.route("/un/:userId").post(removeFollower);
 

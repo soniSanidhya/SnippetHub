@@ -77,7 +77,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
     handleDragScroll({ currentTarget: container });
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div></div>;
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
