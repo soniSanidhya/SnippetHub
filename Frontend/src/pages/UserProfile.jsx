@@ -127,9 +127,18 @@ export default function UserProfile() {
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                    <span className="text-2xl font-bold text-gray-600 dark:text-gray-300">
-                      {user.fullName?.charAt(0).toUpperCase()}
-                    </span>
+                  {
+                      user?.avatar ?
+                      <img
+                        src={user?.avatar}
+                        alt={user?.fullName || user?.username}
+                        className="w-8 h-8 rounded-full"/>
+                      :
+                      <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                      <span className="text-sm font-medium">
+                        {user?.fullName?.charAt(0) || user?.username?.charAt(0)}
+                      </span>
+                    </div>}
                   </div>
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
