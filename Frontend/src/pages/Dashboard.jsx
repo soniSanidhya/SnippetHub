@@ -263,10 +263,10 @@ def process_csv(filename):
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                      {snippet.title}
+                      {snippet.title?.length < 30 ? snippet.title : `${snippet.title.substring(0, 30)}...`}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300 mb-2">
-                      {snippet.description}
+                      {snippet?.description.length > 100 ? `${snippet.description.slice(0, 100)}...` : snippet.description}
                     </p>
                     <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
                       <span>{snippet.language}</span>

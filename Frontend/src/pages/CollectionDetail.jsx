@@ -132,9 +132,9 @@ export default function CollectionDetail() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-xl font-semibold mb-2">
-                    {snippet.title && snippet.title.length < 30  ? snippet.title : `${snippet.title?.substring(0, 30)}...`}
+                    {snippet.title && snippet?.title.length < 30  ? snippet.title : `${snippet.title?.substring(0, 30)}...`}
                   </h3>
-                  <p className="text-gray-600 mb-2">{snippet.description.length > 100 ? `${snippet.description.slice(0, 100)}...` : snippet.description}</p>
+                  <p className="text-gray-600 mb-2">{snippet.description?.length > 100 ? `${snippet.description.slice(0, 100)}...` : snippet.description}</p>
                   <div className="flex items-center space-x-4 text-sm text-gray-500">
                     <span>By {snippet.owner.fullName}</span>
                     <div className="flex items-center">
