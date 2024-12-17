@@ -60,7 +60,7 @@ export default function SnippetDetail({ snippet = {}, onClose }) {
             <h2 className="text-2xl font-bold break-all text-gray-900 dark:text-white">{snippet.title}</h2>
             <SnippetMetadata snippet={snippet} />
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-start justify-center space-x-4">
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
