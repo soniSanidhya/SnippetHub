@@ -47,7 +47,7 @@ export default function SnippetDetail({ snippet = {}, onClose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="  fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
     >
       <motion.div
         initial={{ y: 20, opacity: 0 }}
@@ -55,20 +55,12 @@ export default function SnippetDetail({ snippet = {}, onClose }) {
         exit={{ y: 20, opacity: 0 }}
         className="max-h-[95vh] overflow-auto bg-white dark:bg-gray-800 rounded-lg w-full max-w-6xl my-8"
       >
-        <div className="    bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex justify-between items-center z-10">
+        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex justify-between items-center z-10">
           <div className="flex-1">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{snippet.title}</h2>
+            <h2 className="text-2xl font-bold break-words text-gray-900 dark:text-white">{snippet.title}</h2>
             <SnippetMetadata snippet={snippet} />
           </div>
           <div className="flex items-center space-x-4">
-            {/* {isOwner && (
-              <button
-                onClick={handleDelete}
-                className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
-              >
-                Delete
-              </button>
-            )} */}
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -80,9 +72,9 @@ export default function SnippetDetail({ snippet = {}, onClose }) {
           </div>
         </div>
 
-        <div className="p-6 space-y-8 ">
+        <div className="p-6 space-y-8">
           <div className="prose dark:prose-invert max-w-none">
-            <p className="text-gray-600 dark:text-gray-300">{snippet.description}</p>
+            <p className="text-gray-600 dark:text-gray-300 break-words">{snippet.description}</p>
           </div>
 
           <SnippetReadme snippet={snippet} isOwner={false} />
@@ -117,7 +109,7 @@ export default function SnippetDetail({ snippet = {}, onClose }) {
             <SnippetActions snippet={snippet} />
           
             { isAuthenticated && <SnippetCollection snippet={snippet} />}
-              </div>
+          </div>
 
           <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
             <SnippetComments snippet={snippet} isAuthenticated={isAuthenticated} />
