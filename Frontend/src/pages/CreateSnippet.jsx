@@ -85,6 +85,14 @@ export default function CreateSnippet() {
     mutationFn: () => postSnippet(data),
     onSuccess: (data) => {
       setData(null);
+      setTitle("");
+      setDescription("");
+      setDocumentation("# How it works\n\nDescribe how your code works here...");
+      setLanguage(languageOptions[0]);
+      setCategory(categoryOptions[0]);
+      setCode("");
+      setTags("");
+      
       console.log(data);
     },
   });
