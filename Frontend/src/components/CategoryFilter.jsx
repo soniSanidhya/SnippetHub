@@ -107,7 +107,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
                   : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
-              {category.name}
+              {category.name.length > 10 ? category.name : category.name.slice(0, 10) + "..."}
             </button>
           ))
         )
