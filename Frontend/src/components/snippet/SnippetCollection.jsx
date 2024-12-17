@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import useAuthStore from "../../store/authStore";
 import { api } from "../../utils/axiosHelper";
-import { showSuccess } from "../../utils/toast";
+import { showError, showSuccess } from "../../utils/toast";
 import { InfinitySpin } from "react-loader-spinner";
 
 const fetchCollections = (username) => api.get(`/collection/${username}`);
@@ -28,6 +28,12 @@ const SnippetCollection = ({ snippet }) => {
     onSuccess : (data)=>{
         console.log(data);
         showSuccess('Snippet added to collection');
+    },
+    onError : (error)=>{
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(error.response.data, 'text/html');
+      const msg = doc.querySelector('pre').textContent.split('at')[0].trim();
+      showError(msg);
     }
   })
 

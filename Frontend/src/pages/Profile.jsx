@@ -4,6 +4,7 @@ import { api } from "../utils/axiosHelper.js";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuthStore from "../store/authStore.js";
 import { InfinitySpin } from "react-loader-spinner";
+import { showError, showSuccess } from "../utils/toast.js";
 
 const patchProfile = (profile) => api.patch("user/update", profile);
 
@@ -31,8 +32,15 @@ export default function Profile() {
     mutationFn: (avatar) => patchAvatar(avatar),
     onSuccess: (data) => {
       updateUser(data.data.data);
+      showSuccess("Avatar updated successfully");
       // console.log( "update avavta" , data);
     },
+    onError: (error) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(error.response.data, 'text/html');
+      const msg = doc.querySelector('pre').textContent.split('at')[0].trim();
+      showError(msg);
+    }
   });
 
   const { mutate: updateProfileMutation } = useMutation({
@@ -40,8 +48,15 @@ export default function Profile() {
     mutationFn: (profile) => patchProfile(profile),
     onSuccess: (data) => {
       updateUser(data.data.data);
+      showSuccess("Profile updated successfully");
       // console.log("ipfssd", data);
     },
+    onError: (error) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(error.response.data, 'text/html');
+      const msg = doc.querySelector('pre').textContent.split('at')[0].trim();
+      showError(msg);
+    }
   });
 
   const { data: userProfile , isLoading , isError , error } = useQuery({

@@ -72,6 +72,7 @@ export default function UserProfile() {
       queryClient.setQueryData( ["isFollowing", userProfile?.data.data._id] , {data : {data : isFollowingData?.data?.data ? false : true}});  
       // queryClient.setQueryData( ["followers", userProfile?.data.data?._id] , {data : {data : {followerCount : isFollowingData?.data?.data ? followers?.data.data.followerCount - 1 : followers?.data.data.followerCount + 1 , followers : isFollowingData?.data?.data ? followers?.data?.data?.filter(f => f._id !== loggedInUser._id ) :  [...followers?.data.data.followers , loggedInUser]}}});
       queryClient.invalidateQueries(["followers", userProfile?.data.data?._id]);
+      
       console.log("Followed");
 
     },

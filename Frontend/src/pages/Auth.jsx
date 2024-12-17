@@ -29,16 +29,29 @@ export default function Auth() {
       console.log("user logged in successfully",data);
       login(data.data.data.user , data.data.data.accessToken  );
       navigate(from, { replace: true });
+    },
+    onError : (error)=>{
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(error.response.data, 'text/html');
+      const msg = doc.querySelector('pre').textContent.split('at')[0].trim();
+      setError(msg);
+      console.log("error in logging in", msg);
     }
   });
 
-  const {mutate : signupMutation} = useMutation({
+  const {mutate : signupMutation , error : signupError} = useMutation({
     mutationKey : ["signup"],
     mutationFn : ()=> postSignup(formData),
     onSuccess : (data)=>{
       console.log("user signed up successfully",data);
       login(data.data.data.user , data.data.data.accessToken  );
       navigate(from, { replace: true });
+    },
+    onError : (error)=>{
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(error.response.data, 'text/html');
+      const msg = doc.querySelector('pre').textContent.split('at')[0].trim();
+      setError(msg);
     }
   })
 
@@ -82,7 +95,7 @@ export default function Auth() {
         </div>
         {error && (
           <div className="bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-200 px-4 py-3 rounded relative">
-            {error}
+            { error}
           </div>
         )}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

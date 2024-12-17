@@ -6,6 +6,7 @@ import CustomSelect from "../components/CustomSelect";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../utils/axiosHelper.js";
 import Input from "../components/ui/Input.jsx";
+import { showError, showSuccess } from "../utils/toast.js";
 
 const postSnippet = (snippetData) => api.post("/snippet", snippetData);
 
@@ -93,8 +94,15 @@ export default function CreateSnippet() {
       setCode("");
       setTags("");
       
+      showSuccess("Snippet created successfully");
       console.log(data);
     },
+    onError: (error) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(error.response.data, 'text/html');
+      const msg = doc.querySelector('pre').textContent.split('at')[0].trim();
+      showError(msg);
+    }
   });
   const handleCreateOption = (inputValue) => {
     console.log("Creating new option:", inputValue);
