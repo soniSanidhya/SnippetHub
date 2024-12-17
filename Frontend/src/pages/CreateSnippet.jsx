@@ -84,6 +84,7 @@ export default function CreateSnippet() {
   const { mutate, error, isError, isPending } = useMutation({
     mutationFn: () => postSnippet(data),
     onSuccess: (data) => {
+      setData(null);
       console.log(data);
     },
   });
