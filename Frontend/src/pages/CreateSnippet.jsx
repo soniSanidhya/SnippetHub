@@ -19,6 +19,54 @@ export default function CreateSnippet() {
     value: "javascript",
     label: "JavaScript",
   });
+
+  const languageOptions =[
+    { value: "javascript", label: "JavaScript" },
+{ value: "python", label: "Python" },
+{ value: "java", label: "Java" },
+{ value: "cpp", label: "C++" },
+{ value: "typescript", label: "TypeScript" },
+{ value: "html", label: "HTML" },
+{ value: "css", label: "CSS" },
+{ value: "sql", label: "SQL" },
+{ value: "ruby", label: "Ruby" },
+{ value: "php", label: "PHP" },
+{ value: "swift", label: "Swift" },
+{ value: "go", label: "Go" },
+{ value: "rust", label: "Rust" },
+{ value: "kotlin", label: "Kotlin" },
+{ value: "r", label: "R" },
+{ value: "dart", label: "Dart" },
+{ value: "lua", label: "Lua" },
+{ value: "bash", label: "Bash" },
+{ value: "matlab", label: "MATLAB" },
+{ value: "vhdl", label: "VHDL" },
+{ value: "assembly", label: "Assembly" },
+{ value: "delphi", label: "Delphi" },
+{ value: "elixir", label: "Elixir" },
+{ value: "haskell", label: "Haskell" },
+{ value: "perl", label: "Perl" },
+{ value: "scala", label: "Scala" },
+{ value: "groovy", label: "Groovy" },
+{ value: "clojure", label: "Clojure" },
+{ value: "fsharp", label: "F#" },
+{ value: "actionscript", label: "ActionScript" },
+{ value: "visualbasic", label: "Visual Basic" },
+{ value: "objective-c", label: "Objective-C" },
+{ value: "dart", label: "Dart" },
+{ value: "tcl", label: "Tcl" },
+{ value: "racket", label: "Racket" },
+{ value: "fortran", label: "Fortran" },
+{ value: "prolog", label: "Prolog" },
+{ value: "vba", label: "VBA" },
+{ value: "verilog", label: "Verilog" },
+{ value: "pascal", label: "Pascal" },
+{ value: "postscript", label: "PostScript" },
+{ value: "sml", label: "Standard ML" },
+{ value: "nim", label: "Nim" }
+
+  ]
+
   const [categoryOptions, setCategoryOptions] = useState([
     { value: "frontend", label: "Frontend" },
     { value: "backend", label: "Backend" },
@@ -105,16 +153,7 @@ export default function CreateSnippet() {
               <CustomSelect
                 onChange={setLanguage}
                 value={language}
-                options={[
-                  { value: "javascript", label: "JavaScript" },
-                  { value: "python", label: "Python" },
-                  { value: "java", label: "Java" },
-                  { value: "cpp", label: "C++" },
-                  { value: "typescript", label: "TypeScript" },
-                  { value: "html", label: "HTML" },
-                  { value: "css", label: "CSS" },
-                  { value: "sql", label: "SQL" },
-                ]}
+                options={languageOptions}
               />
             </div>
 
