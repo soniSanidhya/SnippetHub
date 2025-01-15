@@ -1,47 +1,55 @@
 {
-    "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
-        }
-    ],
-    "headers": [
-        {
-          "source": "/robots.txt",
-          "headers": [
-            {
-              "key": "Content-Type",
-              "value": "text/plain"
-            }
-          ]
-        },
-        {
-          "source": "/ads.txt",
-          "headers": [
-            {
-              "key": "Content-Type",
-              "value": "text/plain"
-            }
-          ]
-        },
-        {
-          "source": "/SnippetHubExplore.png",
-          "headers": [
-            {
-              "key": "Content-Type",
-              "value": "image/x-icon"
-            }
-          ]
-        }
-        ,
-        {
-          "source": "/SnippetHubMain.png",
-          "headers": [
-            {
-              "key": "Content-Type",
-              "value": "image/x-icon"
-            }
-          ]
-        }
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/robots.txt",
+      "headers": [
+      {
+        "key": "Content-Type",
+        "value": "text/plain"
+      }
       ]
+    },
+    {
+      "source": "/ads.txt",
+      "headers": [
+      {
+        "key": "Content-Type",
+        "value": "text/plain"
+      }
+      ]
+    },
+    {
+      "source": "/SnippetHubExplore.png",
+      "headers": [
+      {
+        "key": "Content-Type",
+        "value": "image/x-icon"
+      }
+      ]
+    },
+    {
+      "source": "/SnippetHubMain.png",
+      "headers": [
+      {
+        "key": "Content-Type",
+        "value": "image/x-icon"
+      }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+      {
+        "key": "Content-Type",
+        "value": "application/xml"
+      }
+      ]
+    }
+  ]
 }
