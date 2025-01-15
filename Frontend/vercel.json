@@ -23,6 +23,25 @@
               "value": "text/plain"
             }
           ]
+        },
+        {
+          "source": "/SnippetHubExplore.png",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "image/x-icon"
+            }
+          ]
+        }
+        ,
+        {
+          "source": "/SnippetHubMain.png",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "image/x-icon"
+            }
+          ]
         }
       ]
 }
