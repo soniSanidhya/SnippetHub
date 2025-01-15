@@ -8,10 +8,24 @@ dotenv.config();
 const app = express();
 
 // Configure CORS options
+
+const whitelist = ["https://snippethub-one.vercel.app" , "https://www.snippethub.tech"]
+
+
 const corsOptions = {
-  origin: 'https://snippethub-one.vercel.app', // Frontend URL
+  // origin: 'https://snippethub-one.vercel.app', // Frontend URL
   // origin : 'http://localhost:5173',
-  credentials: true,              // Allow credentials (cookies, headers)
+
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+
+  credentials: true,          
+      // Allow credentials (cookies, headers)
 };
 
 app.use(cors(corsOptions)); // Apply CORS middleware
