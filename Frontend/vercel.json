@@ -3,6 +3,10 @@
         {
             "source": "/(.*)",
             "destination": "/index.html"
+        },
+        {
+            "source": "/google296791df43c278e4.html",
+            "destination": "/google296791df43c278e4.html"
         }
     ],
     "headers": [

@@ -109,11 +109,11 @@ def process_csv(filename):
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries("mySnippets");
-      console.log(data);
+      // console.log(data);
       showSuccess("Snippet updated successfully");
     },
     onError: (error, variables, context) => {
-      console.log(error);
+      // console.log(error);
     },
   });
 
@@ -122,11 +122,11 @@ def process_csv(filename):
     
     onSuccess: (data) => {
       queryClient.invalidateQueries("mySnippets");
-      console.log(data);
+      // console.log(data);
       showSuccess("Snippet deleted successfully");
     },
     onError: (error, variables, context) => {
-      console.log(error);
+      // console.log(error);
       showError("Something went wrong while deleting snippet");
     },
   })
@@ -152,7 +152,7 @@ def process_csv(filename):
 
   const handleUpdate = () => {
 
-    console.log(editingSnippet);
+    // console.log(editingSnippet);
     
 
     updateSnippet({snippetId: editingSnippet._id, data : editingSnippet });

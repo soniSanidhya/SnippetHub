@@ -4,7 +4,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 
 const fetchCategories = ({ pageParam }) => {
-  console.log("fetching page", pageParam);
+  // console.log("fetching page", pageParam);
   return api
     .get("/category", { params: { page: pageParam } })
     .then((res) => res.data);
@@ -37,7 +37,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
     if (inView && hasNextPage) {
       // console.log(data);
 
-      console.log("fetching next page", hasNextPage);
+      // console.log("fetching next page", hasNextPage);
 
       fetchNextPage();
     }

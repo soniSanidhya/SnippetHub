@@ -98,12 +98,12 @@ export default function CollectionDetail() {
     mutationFn: (snippetId) => removeSnippet(id,snippetId),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["collectionDetails", id]);
-      console.log(data);
+      // console.log(data);
       showSuccess("Snippet removed successfully");
     },
   })
 
-  console.log(collection);
+  // console.log(collection);
 
   if (isLoading) {
     return <div>Loading...</div>;

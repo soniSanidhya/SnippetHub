@@ -63,7 +63,7 @@ export default function UserProfile() {
     staleTime: 1000 * 60 * 2,
   });
 
-  console.log("Is Following", isFollowingData);
+  //console.log("Is Following", isFollowingData);
   const queryClient = useQueryClient();
   const { mutate: followUser } = useMutation({
     mutationFn: () => postFollow(userProfile?.data?.data?._id),
@@ -73,7 +73,7 @@ export default function UserProfile() {
       // queryClient.setQueryData( ["followers", userProfile?.data.data?._id] , {data : {data : {followerCount : isFollowingData?.data?.data ? followers?.data.data.followerCount - 1 : followers?.data.data.followerCount + 1 , followers : isFollowingData?.data?.data ? followers?.data?.data?.filter(f => f._id !== loggedInUser._id ) :  [...followers?.data.data.followers , loggedInUser]}}});
       queryClient.invalidateQueries(["followers", userProfile?.data.data?._id]);
       
-      console.log("Followed");
+      //console.log("Followed");
 
     },
   });
@@ -82,7 +82,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (isProfileSuccess) {
-      console.log(userProfile.data.data);
+      //console.log(userProfile.data.data);
 
       setUser(userProfile.data.data);
     }

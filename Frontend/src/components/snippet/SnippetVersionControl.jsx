@@ -46,7 +46,7 @@ export default function SnippetVersionControl({ snippet = {}, isOwner }) {
 }
 });
 
-  console.log(versions);
+  // console.log(versions);
 
   const handleCreateVersion = async () => {
     try {

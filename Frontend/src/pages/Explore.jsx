@@ -17,7 +17,7 @@ const fetchQuerySnippets = ({
   sortBy,
   sortOrder,
 }) => {
-  console.log("pages : ", pageParam);
+  // console.log("pages : ", pageParam);
   return api.get("/search", {
     params: { page: pageParam, query, language, category, sortBy, sortOrder },
   });
@@ -70,22 +70,22 @@ export default function Explore() {
     },
   });
 
-  console.log(searchResults);
+  // console.log(searchResults);
 
-  console.log("has more", hasNextPage);
+  // console.log("has more", hasNextPage);
 
   useEffect(() => {
     if (inView && hasNextPage) {
-      console.log(hasNextPage);
+      // console.log(hasNextPage);
 
-      console.log("fetching in view");
+      // console.log("fetching in view");
       fetchNextSearchPage();
     }
   }, [inView, searchQuery]);
 
   useEffect(() => {
     
-      console.log("something changed");    
+      // console.log("something changed");    
       fetchSearch();
     
   }, [selectedCategory, selectedLanguage, selectedSort, selectedOrder]);
@@ -249,7 +249,7 @@ export default function Explore() {
                   onChange={(value) => {
                     setSelectedLanguage(value.value);
 
-                    console.log(value.value);
+                    // console.log(value.value);
                   }}
                   value={{
                     value: selectedLanguage,
@@ -270,7 +270,7 @@ export default function Explore() {
                 <CustomSelect
                   onChange={(value) => {
                     setSelectedSortShow(value);
-                    console.log(value.value);
+                    // console.log(value.value);
 
                     switch (value.value) {
                       case "newest": {

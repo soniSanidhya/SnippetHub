@@ -28,14 +28,14 @@ export default function Collections() {
     queryFn: () => fetchCollections(user.username),
     staleTime: 1000 * 60 * 2,
   });
-  console.log(data);
+  // console.log(data);
 
   const { mutate: createCollectionMutation } = useMutation({
     mutationKey: ["createCollection"],
     mutationFn: (collection) => postCollection(collection),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["collections", user.username]);
-      console.log(data);
+      // console.log(data);
     },
   });
 
@@ -43,7 +43,7 @@ export default function Collections() {
     mutationKey: ["deleteCollection"],
     mutationFn: (collectionId) => deleteCollection(collectionId),
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
 
       queryClient.invalidateQueries(["collections", user.username]);
 
@@ -61,7 +61,7 @@ export default function Collections() {
 
   const handleCreateCollection = (e) => {
     e.preventDefault();
-    console.log("New collection:", newCollection);
+    // console.log("New collection:", newCollection);
     setShowCreateModal(false);
     setNewCollection({ name: "", description: "" });
     createCollectionMutation(newCollection);

@@ -20,7 +20,7 @@ export default function SnippetComments({ snippet, isAuthenticated }) {
     mutationKey : "postComment",
     mutationFn : (content)=> postComment(snippet._id, content),
     onSuccess : (data)=>{
-      console.log(data);
+      // console.log(data);
       
       setComments([ data.data.data,...comments]);
       setNewComment('');

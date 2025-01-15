@@ -9,7 +9,7 @@ export default function SnippetMetadata({ snippet }) {
   const displayName = author.name || author.username || 'Anonymous';
   const initial = displayName.charAt(0).toUpperCase();
 
-  console.log(snippet);
+  // console.log(snippet);
   
   return (
     <div className="flex items-center mt-1 space-x-2 text-sm text-gray-600 dark:text-gray-400">

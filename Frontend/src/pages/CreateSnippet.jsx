@@ -95,7 +95,7 @@ export default function CreateSnippet() {
       setTags("");
       
       showSuccess("Snippet created successfully");
-      console.log(data);
+      // console.log(data);
     },
     onError: (error) => {
       const parser = new DOMParser();
@@ -105,7 +105,7 @@ export default function CreateSnippet() {
     }
   });
   const handleCreateOption = (inputValue) => {
-    console.log("Creating new option:", inputValue);
+    // console.log("Creating new option:", inputValue);
 
     const newOption = { value: inputValue, label: inputValue };
     setCategoryOptions((prevOptions) => [...prevOptions, newOption]);
@@ -131,7 +131,7 @@ export default function CreateSnippet() {
 
   // Collect data for submission
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">

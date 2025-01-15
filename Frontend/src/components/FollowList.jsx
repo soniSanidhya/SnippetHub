@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function FollowList({ type, users, onClose }) {
 
-  console.log(users);
+  // console.log(users);
   
 
   const [searchQuery, setSearchQuery] = useState('');

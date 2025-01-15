@@ -25,7 +25,7 @@ export default function Profile() {
 
   const [avatar, setAvatar] = useState(null);
 
-  // console.log(user);
+  // //console.log(user);
 
   const { mutate: updateAvatarMutation } = useMutation({
     mutationKey: ["updateAvatar"],
@@ -33,7 +33,7 @@ export default function Profile() {
     onSuccess: (data) => {
       updateUser(data.data.data);
       showSuccess("Avatar updated successfully");
-      // console.log( "update avavta" , data);
+      // //console.log( "update avavta" , data);
     },
     onError: (error) => {
       const parser = new DOMParser();
@@ -49,7 +49,7 @@ export default function Profile() {
     onSuccess: (data) => {
       updateUser(data.data.data);
       showSuccess("Profile updated successfully");
-      // console.log("ipfssd", data);
+      // //console.log("ipfssd", data);
     },
     onError: (error) => {
       const parser = new DOMParser();
@@ -75,31 +75,31 @@ export default function Profile() {
     twitter: userProfile?.data.data?.twitter||"",
   });
 
-  console.log("userProfile", userProfile);
-  console.log("profile", profile);
+  //console.log("userProfile", userProfile);
+  //console.log("profile", profile);
 
   
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("avatar", avatar);
+    //console.log("avatar", avatar);
 
     if (avatar) {
       const avatarFormData = new FormData();
       avatarFormData.append("avatar", avatar);
-      console.log(avatarFormData.get("avatar"));
+      //console.log(avatarFormData.get("avatar"));
 
       updateAvatarMutation(avatarFormData);
     }
     updateProfileMutation(profile);
-    console.log("Profile updated:", profile, avatar);
+    //console.log("Profile updated:", profile, avatar);
   };
 
   const handleAvatarChange = (e) => {
     setAvatar(e.target.files[0]);
 
-    console.log("avatar in change", e.target.files[0]);
+    //console.log("avatar in change", e.target.files[0]);
   };
 
   if(isLoading)  return   <div className="w-full h-[90vh] flex justify-center items-center">

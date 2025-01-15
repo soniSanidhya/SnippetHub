@@ -26,7 +26,7 @@ const SnippetCollection = ({ snippet }) => {
     mutationKey : ["addSnippetToCollection"],
     mutationFn : (snippetId)=> postCollection(selectedCollection, snippetId),
     onSuccess : (data)=>{
-        console.log(data);
+        // console.log(data);
         showSuccess('Snippet added to collection');
     },
     onError : (error)=>{
@@ -37,7 +37,7 @@ const SnippetCollection = ({ snippet }) => {
     }
   })
 
-  console.log(snippet);
+  // console.log(snippet);
 //   const collections = [
 //     { id: 1, name: "Favorite Snippets" },
 //     { id: 2, name: "React Hooks" },
@@ -47,7 +47,7 @@ const SnippetCollection = ({ snippet }) => {
 const handleAddToCollection = () => {
     if (selectedCollection) {
         addSnippetToCollectionMutation(snippet._id);
-      console.log(`Added to collection: ${selectedCollection}`);
+      // console.log(`Added to collection: ${selectedCollection}`);
     }
   };
 

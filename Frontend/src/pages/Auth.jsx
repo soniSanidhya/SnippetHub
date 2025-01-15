@@ -26,7 +26,7 @@ export default function Auth() {
     mutationKey : ["login"],
     mutationFn : ()=> postLogin(formData),
     onSuccess : (data)=>{
-      console.log("user logged in successfully",data);
+      // console.log("user logged in successfully",data);
       login(data.data.data.user , data.data.data.accessToken  );
       navigate(from, { replace: true });
     },
@@ -35,7 +35,7 @@ export default function Auth() {
       const doc = parser.parseFromString(error.response.data, 'text/html');
       const msg = doc.querySelector('pre').textContent.split('at')[0].trim();
       setError(msg);
-      console.log("error in logging in", msg);
+      // console.log("error in logging in", msg);
     }
   });
 
@@ -43,7 +43,7 @@ export default function Auth() {
     mutationKey : ["signup"],
     mutationFn : ()=> postSignup(formData),
     onSuccess : (data)=>{
-      console.log("user signed up successfully",data);
+      // console.log("user signed up successfully",data);
       login(data.data.data.user , data.data.data.accessToken  );
       navigate(from, { replace: true });
     },
