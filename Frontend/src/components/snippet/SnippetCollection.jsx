@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import useAuthStore from "../../store/authStore";
 import { api } from "../../utils/axiosHelper";
 import { showError, showSuccess } from "../../utils/toast";
-import { InfinitySpin } from "react-loader-spinner";
+
 
 const fetchCollections = (username) => api.get(`/collection/${username}`);
 const postCollection = (collectionId , snippetId) => api.post(`/collection/${collectionId}/${snippetId}`);
@@ -51,16 +51,12 @@ const handleAddToCollection = () => {
     }
   };
 
-  if (isLoading) return <div className="w-full h-[90vh] flex justify-center items-center">
-  <div>
-    <InfinitySpin
-      visible={true}
-      width="200"
-      color="#4F46E5"
-      ariaLabel="infinity-spin-loading"
-    />
-  </div>
-</div>;
+//   if (isLoading) return 
+//   <div className="w-full flex justify-center items-center">
+//   <div >
+    
+//   </div>
+// </div>;
 
   return (
     <div className="flex items-center space-x-2">
@@ -70,7 +66,7 @@ const handleAddToCollection = () => {
         className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
       >
         <option value="">Select collection...</option>
-        {collections?.data.data?.map((collection) => (
+        {collections && collections?.data.data?.map((collection) => (
           <option key={collection._id} value={collection._id}>
             {collection.name}
           </option>

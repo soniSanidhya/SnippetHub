@@ -1,17 +1,24 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 import { api } from "../utils/axiosHelper.js";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import SnippetDetail from "../components/SnippetDetail.jsx";
 import { showSuccess } from "../utils/toast.js";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import { InfinitySpin } from "react-loader-spinner";
+import DashBoardSkeleton from "../components/skeletons/DashBoardSkeleton.jsx";
 const fetchCollectionDetails = (collectionId) =>
   api.get(`collection/c/${collectionId}`);
 
-const removeSnippet = (collectionId,snippetId)=> api.delete(`/collection/${collectionId}/${snippetId}`);
+const removeSnippet = (collectionId, snippetId) =>
+  api.delete(`/collection/${collectionId}/${snippetId}`);
 
 export default function CollectionDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [selectedSnippet, setSelectedSnippet] = useState(null);
   //   const [collection] = useState({
   //     id: 1,
@@ -91,23 +98,32 @@ export default function CollectionDetail() {
   } = useQuery({
     queryKey: ["collectionDetails", id],
     queryFn: () => fetchCollectionDetails(id),
-    staleTime: 1000 * 60 * 10,
   });
 
   const { mutate: removeSnippetMutation } = useMutation({
-    mutationFn: (snippetId) => removeSnippet(id,snippetId),
+    mutationFn: (snippetId) => removeSnippet(id, snippetId),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["collectionDetails", id]);
       // console.log(data);
       showSuccess("Snippet removed successfully");
     },
-  })
+  });
+
+  const handleSnippetClick = (snippet) => {
+    navigate(`/snippet/details/?title=${snippet.title}&id=${snippet._id}`);
+  };
 
   // console.log(collection);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return (
+  //   //   <div className="w-full h-[90vh] flex justify-center items-center">
+  //   //   <InfinitySpin visible={true} width="200" color="#4F46E5" ariaLabel="infinity-spin-loading" />
+  //   // </div>
+
+
+  //   );
+  // }
 
   if (isError) {
     return <div>Error {error.message}</div>;
@@ -118,13 +134,13 @@ export default function CollectionDetail() {
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {collection?.data.data?.name}
+            {collection?.data.data?.name || <Skeleton count={1} width={100} height={30} baseColor="#e0e0e0" highlightColor="#f0f0f0" />}
           </h1>
-          <p className="text-gray-600">{collection.data.data?.description}</p>
+          <p className="text-gray-600">{collection?.data.data?.description || <Skeleton width={200} />}</p>
         </div>
 
         <div className="space-y-8">
-          {collection.data?.data?.snippets?.map((snippet) => (
+          { isLoading ? <DashBoardSkeleton.DashBoardCardSkeleton/> :  collection.data?.data?.snippets?.map((snippet) => (
             <div
               key={snippet._id}
               className="bg-white  dark:bg-gray-800 rounded-lg shadow-md p-6"
@@ -132,11 +148,20 @@ export default function CollectionDetail() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-xl font-semibold mb-2">
-                    {snippet.title && snippet?.title.length < 30  ? snippet.title : `${snippet.title?.substring(0, 30)}...`}
+                    {snippet.title && snippet?.title.length < 30
+                      ? snippet.title
+                      : `${snippet.title?.substring(0, 30)}...`}
                   </h3>
-                  <p className="text-gray-600 mb-2">{snippet.description?.length > 100 ? `${snippet.description.slice(0, 100)}...` : snippet.description}</p>
+                  <p
+                    title={snippet?.description}
+                    className="text-gray-600 mb-2"
+                  >
+                    {snippet.description?.length > 100
+                      ? `${snippet.description.slice(0, 100)}...`
+                      : snippet.description}
+                  </p>
                   <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span>By {snippet.owner.fullName}</span>
+                    <span>By @{snippet.owner.username}</span>
                     <div className="flex items-center">
                       <svg
                         className="w-4 h-4 mr-1"
@@ -174,7 +199,7 @@ export default function CollectionDetail() {
                   </button>
                   <button
                     onClick={() => {
-                      setSelectedSnippet(snippet);
+                      handleSnippetClick(snippet);
                     }}
                     className="text-blue-500 hover:text-blue-600"
                   >
@@ -191,14 +216,6 @@ export default function CollectionDetail() {
             </div>
           ))}
         </div>
-        {selectedSnippet && (
-          <SnippetDetail
-            snippet={selectedSnippet}
-            onClose={() => {
-              setSelectedSnippet(null);
-            }}
-          />
-        )}
       </div>
     </div>
   );

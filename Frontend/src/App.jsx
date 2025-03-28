@@ -1,19 +1,21 @@
-import { ThemeProvider } from 'next-themes';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import { AnimatePresence } from 'framer-motion';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Explore from './pages/Explore';
-import CreateSnippet from './pages/CreateSnippet';
-import Collections from './pages/Collections';
-import CollectionDetail from './pages/CollectionDetail';
-import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
-import UserProfile from './pages/UserProfile';
-import Auth from './pages/Auth';
-import AuthGuard from './components/AuthGuard';
+import { ThemeProvider } from "next-themes";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { AnimatePresence } from "framer-motion";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Explore from "./pages/Explore";
+import CreateSnippet from "./pages/CreateSnippet";
+import Collections from "./pages/Collections";
+import CollectionDetail from "./pages/CollectionDetail";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
+import Auth from "./pages/Auth";
+import AuthGuard from "./components/AuthGuard";
+import SnippetDetail from "./components/SnippetDetail";
+import { useEffect, useState } from "react";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/explore" element={<Explore />} />
+                <Route path="/snippets/:id" element={<SnippetDetail />} />
+                <Route path="/snippet/details" element={<SnippetDetail />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route
                   path="/create"
@@ -77,10 +81,10 @@ function App() {
           position="top-right"
           toastOptions={{
             duration: 3000,
-            className: 'dark:bg-gray-800 dark:text-white',
+            className: "dark:bg-gray-800 dark:text-white",
             style: {
-              background: 'var(--toast-bg)',
-              color: 'var(--toast-color)',
+              background: "var(--toast-bg)",
+              color: "var(--toast-color)",
             },
           }}
         />

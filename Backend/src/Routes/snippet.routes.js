@@ -1,10 +1,14 @@
 import { Router } from 'express'
-import { addSnippet, addView, deleteSnippet, deleteVersion, editSnippet, getSnippets, getSnippetVersions } from '../Controllers/snippet.controllers.js';
+import { addSnippet, addView, deleteSnippet, deleteVersion, editSnippet, getRecommendedSnippets, getSnippetDetails, getSnippets, getSnippetVersions } from '../Controllers/snippet.controllers.js';
 import { verifyJWT } from '../Middleware/auth.middleware.js';
 
 const router = Router() 
 
 router.route('/').get(getSnippets);
+
+router.route('/snippet-details/:snippetId').get(getSnippetDetails);
+
+router.route('/recommended-snippets').get(getRecommendedSnippets);
 
 router.route('/').post(verifyJWT, addSnippet);
 

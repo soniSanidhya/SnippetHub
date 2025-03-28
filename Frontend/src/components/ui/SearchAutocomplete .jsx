@@ -11,25 +11,7 @@ const fetchAutoComplete = (query)=> api.get("/search/autocomplete" , {params : {
 
 // Sample data for autocomplete (can be replaced with API call or larger dataset)
 const sampleData = [
-  'Apple', 
-  'Banana', 
-  'Cherry', 
-  'Date', 
-  'Elderberry', 
-  'Fig', 
-  'Grape', 
-  'Honeydew', 
-  'Kiwi', 
-  'Lemon', 
-  'Mango', 
-  'Nectarine', 
-  'Orange', 
-  'Papaya', 
-  'Quince', 
-  'Raspberry', 
-  'Strawberry', 
-  'Tangerine', 
-  'Watermelon'
+  
 ];
 
 const SearchAutocomplete = ({setSearchQuery , searchQuery , fetchSearch}) => {

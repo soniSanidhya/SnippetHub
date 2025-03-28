@@ -5,6 +5,7 @@ import useAuthStore from "../store/authStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { showSuccess } from "../utils/toast.js";
 import { InfinitySpin } from "react-loader-spinner";
+import CollectionSkeleton from "../components/skeletons/CollectionSkeleton.jsx";
 
 const fetchCollections = (username) => api.get(`/collection/${username}`);
 const postCollection = (collection) => api.post("/collection", collection);
@@ -67,16 +68,16 @@ export default function Collections() {
     createCollectionMutation(newCollection);
   };
 
-  if (isLoading) return   <div className="w-full h-[90vh] flex justify-center items-center">
-  <div>
-    <InfinitySpin
-      visible={true}
-      width="200"
-      color="#4F46E5"
-      ariaLabel="infinity-spin-loading"
-    />
-  </div>
-</div>;
+  // if (isLoading) return   <div className="w-full h-[90vh] flex justify-center items-center">
+  // <div>
+  //   <InfinitySpin
+  //     visible={true}
+  //     width="200"
+  //     color="#4F46E5"
+  //     ariaLabel="infinity-spin-loading"
+  //   />
+  // </div>
+  // </div>;
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
@@ -95,7 +96,13 @@ export default function Collections() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data &&
+          {isLoading ? (
+<>
+<CollectionSkeleton />
+<CollectionSkeleton />
+<CollectionSkeleton />
+
+</>          ) : (
             data?.data?.data?.map((collection) => (
               <Link
                 key={collection._id}
@@ -173,7 +180,8 @@ export default function Collections() {
                   </span>
                 </div>
               </Link>
-            ))}
+            ))
+          )}
         </div>
 
         {showCreateModal && (

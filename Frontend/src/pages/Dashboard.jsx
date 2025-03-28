@@ -8,13 +8,13 @@ import SnippetReadme from "../components/snippet/SnippetReadme";
 import MDEditor, { title } from "@uiw/react-md-editor";
 import { showError, showSuccess } from "../utils/toast";
 import { InfinitySpin } from "react-loader-spinner";
+import DashBoardSkeleton from "../components/skeletons/DashBoardSkeleton";
 
 const fetchSnippet = () => api.get("/user/getSnippets/");
 const getStats = () => api.get("/dashboard/stats");
-const putSnippet = (snippetId, data) => api.put(`/snippet/${snippetId}`, data );
+const putSnippet = (snippetId, data) => api.put(`/snippet/${snippetId}`, data);
 const deleteSnippet = (snippetId) => api.delete(`/snippet/${snippetId}`);
 export default function Dashboard() {
-
   const queryClient = useQueryClient();
   // const [stats] = useState({
   //   snippets: 12,
@@ -102,11 +102,9 @@ def process_csv(filename):
     queryFn: fetchSnippet,
   });
 
-  const {mutate: updateSnippet} = useMutation({
+  const { mutate: updateSnippet } = useMutation({
     mutationFn: ({ snippetId, data }) => putSnippet(snippetId, data),
-    onMutate: async (data) => {
-      
-    },
+    onMutate: async (data) => {},
     onSuccess: (data) => {
       queryClient.invalidateQueries("mySnippets");
       // console.log(data);
@@ -117,9 +115,9 @@ def process_csv(filename):
     },
   });
 
-  const {mutate: deleteSnippetMutation} = useMutation({
+  const { mutate: deleteSnippetMutation } = useMutation({
     mutationFn: (snippetId) => deleteSnippet(snippetId),
-    
+
     onSuccess: (data) => {
       queryClient.invalidateQueries("mySnippets");
       // console.log(data);
@@ -129,33 +127,29 @@ def process_csv(filename):
       // console.log(error);
       showError("Something went wrong while deleting snippet");
     },
-  })
+  });
 
   // console.log(stats);
   // console.log(snippets);
-
- 
 
   // console.log(editingSnippet);
 
   const handleEdit = (snippet) => {
     setEditingSnippet({
-      _id : snippet._id,
+      _id: snippet._id,
       title: snippet.title,
       description: snippet.description,
       code: snippet.currentVersion.updatedCode,
       documentation: snippet.documentation,
       language: snippet.language,
-      tags : snippet.tags?.toString()
+      tags: snippet.tags?.toString(),
     });
   };
 
   const handleUpdate = () => {
-
     // console.log(editingSnippet);
-    
 
-    updateSnippet({snippetId: editingSnippet._id, data : editingSnippet });
+    updateSnippet({ snippetId: editingSnippet._id, data: editingSnippet });
 
     // setMySnippets((snippets) =>
     //   snippets.map((snippet) =>
@@ -178,27 +172,17 @@ def process_csv(filename):
   };
 
   const confirmDelete = () => {
-
     deleteSnippetMutation(snippetToDelete._id);
 
     // setMySnippets((snippets) =>
     //   snippets.filter((snippet) => snippet.id !== snippetToDelete.id)
     // );
-    
+
     setShowDeleteModal(false);
     setSnippetToDelete(null);
   };
 
-  if (isStatsLoading || isSnippetsLoading) return <div className="w-full h-[90vh] flex justify-center items-center">
-  <div>
-    <InfinitySpin
-      visible={true}
-      width="200"
-      color="#4F46E5"
-      ariaLabel="infinity-spin-loading"
-    />
-  </div>
-</div>;
+ 
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
@@ -207,7 +191,7 @@ def process_csv(filename):
           Dashboard
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        { isStatsLoading ? <DashBoardSkeleton.DashBoardStatsSkeleton/> : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">
               Snippets
@@ -240,7 +224,7 @@ def process_csv(filename):
               {stats?.data.data?.views}
             </p>
           </div>
-        </div>
+        </div>}
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
           <div className="p-6 border-b border-gray-200 dark:border-gray-700">
@@ -258,15 +242,19 @@ def process_csv(filename):
           </div>
 
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {snippets?.data.data.map((snippet) => (
+            { isSnippetsLoading ? <DashBoardSkeleton.DashBoardCardSkeleton/> : snippets?.data.data.map((snippet) => (
               <div key={snippet._id} className="p-6">
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex justify-between items-start mb-4 sm:flex-row flex-col">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                      {snippet.title?.length < 30 ? snippet.title : `${snippet.title.substring(0, 30)}...`}
+                      {snippet.title?.length < 30
+                        ? snippet.title
+                        : `${snippet.title.substring(0, 30)}...`}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300 mb-2">
-                      {snippet?.description?.length > 100 ? `${snippet.description.slice(0, 100)}...` : snippet.description}
+                      {snippet?.description?.length > 100
+                        ? `${snippet.description.slice(0, 100)}...`
+                        : snippet.description}
                     </p>
                     <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
                       <span>{snippet.language}</span>

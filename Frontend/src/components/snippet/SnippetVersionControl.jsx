@@ -8,6 +8,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 const fetchVersion = (snippet)=> api.get(`/snippet/v/${snippet._id}`);
 const deleteVersion = (versionId)=> api.delete(`/snippet/v/${versionId}`);
 export default function SnippetVersionControl({ snippet = {}, isOwner }) {
+
+  console.log("isOwner" , isOwner);
+  
   // const [versions, setVersions] = useState([
   //   {
   //     id: 1,

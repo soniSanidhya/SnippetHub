@@ -1,4 +1,4 @@
-import { set } from "mongoose";
+import mongoose, { set } from "mongoose";
 import { Category } from "../Models/category.model.js";
 import { Snippet } from "../Models/snippet.model.js";
 import { Version } from "../Models/version.model.js";
@@ -37,8 +37,6 @@ const addSnippet = asyncHandler(async (req, res) => {
     category: categ._id,
   });
 
-
-  
   const version = await Version.create({
     snippet: snippet._id,
     version: 1.0,
@@ -62,11 +60,9 @@ const addSnippet = asyncHandler(async (req, res) => {
 
 const editSnippet = asyncHandler(async (req, res) => {
   const { snippetId } = req.params;
-  const { title , description , code, tags, documentation } = req.body;
+  const { title, description, code, tags, documentation } = req.body;
 
-
-  console.log("body ",req.body);
-  
+  console.log("body ", req.body);
 
   if (!snippetId) {
     throw new ApiError(400, "Snippet Id is required");
@@ -80,13 +76,9 @@ const editSnippet = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Snippet not found");
   }
 
- 
-
   let snippetUpdate;
   if (code !== snippet.currentVersion.updatedCode) {
-
-    console.log("code ",code);
-    
+    console.log("code ", code);
 
     const version = await Version.create({
       snippet: snippet._id,
@@ -128,9 +120,7 @@ const editSnippet = asyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .json(
-      new ApiResponse(200, { snippet, }, "Snippet successfully updated")
-    );
+    .json(new ApiResponse(200, { snippet }, "Snippet successfully updated"));
 });
 
 const getSnippets = asyncHandler(async (req, res) => {
@@ -159,7 +149,6 @@ const getSnippets = asyncHandler(async (req, res) => {
         localField: "owner",
         foreignField: "_id",
         as: "owner",
-        
       },
     },
     {
@@ -168,59 +157,60 @@ const getSnippets = asyncHandler(async (req, res) => {
         localField: "_id",
         foreignField: "snippet",
         as: "commentCount",
-        
       },
     },
     {
-      $lookup : {
-        from : "votes",
-        localField : "_id",
-        foreignField : "snippet",
-        as : "upVoteCount",
-        pipeline : [
+      $lookup: {
+        from: "votes",
+        localField: "_id",
+        foreignField: "snippet",
+        as: "upVoteCount",
+        pipeline: [
           {
-            $match : {
-              isUpVote : true
-            }
-          }
-        ]
-      }
-    },{
-      $lookup : {
-        from : "votes",
-        localField : "_id",
-        foreignField : "snippet",
-        as : "downVoteCount",
-        pipeline : [
+            $match: {
+              isUpVote: true,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "votes",
+        localField: "_id",
+        foreignField: "snippet",
+        as: "downVoteCount",
+        pipeline: [
           {
-            $match : {
-              isUpVote : false
-            }
-          }
-        ]
-      }
+            $match: {
+              isUpVote: false,
+            },
+          },
+        ],
+      },
     },
     {
       $addFields: {
         owner: { $arrayElemAt: ["$owner", 0] },
         currentVersion: { $arrayElemAt: ["$currentVersion", 0] },
 
-        
-        voteCount : { $subtract : [{ $size: "$upVoteCount" }, { $size: "$downVoteCount" }] },
-        commentCount : { $size : "$commentCount" }
+        voteCount: {
+          $subtract: [{ $size: "$upVoteCount" }, { $size: "$downVoteCount" }],
+        },
+        commentCount: { $size: "$commentCount" },
       },
     },
     {
-      $sort : {
-        voteCount : -1
-      }
+      $sort: {
+        voteCount: -1,
+      },
     },
     {
-      $project : {
-        upVoteCount : 0,
-        downVoteCount : 0,
-      }
-    }
+      $project: {
+        upVoteCount: 0,
+        downVoteCount: 0,
+      },
+    },
   ]);
   if (!snippets) {
     return res
@@ -237,7 +227,9 @@ const getSnippetVersions = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Snippet Id is required");
   }
 
-  const versions = await Version.find({ snippet: snippetId }).sort({ createdAt : -1 });
+  const versions = await Version.find({ snippet: snippetId }).sort({
+    createdAt: -1,
+  });
   if (!versions) {
     throw new ApiError(404, "No versions found");
   }
@@ -312,17 +304,115 @@ const deleteVersion = asyncHandler(async (req, res) => {
 
 const getSnippetDetails = asyncHandler(async (req, res) => {
   const { snippetId } = req.params;
+  console.log(snippetId);
 
-  const snippet = await Snippet.findById(snippetId)
-    .populate("currentVersion")
-    .populate("category")
-    .populate("owner");
+  const snippet = await Snippet.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(snippetId),
+      },
+    },
+    {
+      $lookup: {
+        from: "versions",
+        localField: "currentVersion",
+        foreignField: "_id",
+        as: "currentVersion",
+      },
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+        pipeline: [
+          {
+            $project: {
+              username: 1,
+              fullName: 1,
+              avatar: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "snippet",
+        as: "commentCount",
+      },
+    },
+    {
+      $lookup: {
+        from: "votes",
+        localField: "_id",
+        foreignField: "snippet",
+        as: "upVoteCount",
+        pipeline: [
+          {
+            $match: {
+              isUpVote: true,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "votes",
+        localField: "_id",
+        foreignField: "snippet",
+        as: "downVoteCount",
+        pipeline: [
+          {
+            $match: {
+              isUpVote: false,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        owner: { $arrayElemAt: ["$owner", 0] },
+        currentVersion: { $arrayElemAt: ["$currentVersion", 0] },
 
+        voteCount: {
+          $subtract: [{ $size: "$upVoteCount" }, { $size: "$downVoteCount" }],
+        },
+        commentCount: { $size: "$commentCount" },
+      },
+    },
+    {
+      $sort: {
+        voteCount: -1,
+      },
+    },
+    {
+      $project: {
+        upVoteCount: 0,
+        downVoteCount: 0,
+      },
+    },
+  ]);
   if (!snippet) {
     throw new ApiError(404, "Snippet not found");
   }
 
-  res.status(200).json(new ApiResponse(200, snippet, "Snippet details"));
+  console.log(snippet);
+
+  res.status(200).json(new ApiResponse(200, snippet[0], "Snippet details"));
 });
 
 const addView = asyncHandler(async (req, res) => {
@@ -338,13 +428,70 @@ const addView = asyncHandler(async (req, res) => {
   await snippet.save();
 
   res.status(200).json(new ApiResponse(200, snippet, "View added"));
-})
+});
+
+const getRecommendedSnippets = asyncHandler(async (req, res) => {
+  // const { tags } = req.params;
+  const tags = req.query.tags;
+  console.log("params" , req.params);
+  
+  if (!tags) {
+    throw new ApiError(400, "Please provide tags");
+  }
+
+  console.log(tags);
+  
+
+  const snippet = await Snippet.aggregate([
+    {
+      $match: {
+       tags : { $in : tags }
+      }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+        pipeline: [
+          {
+            $project: {
+              username: 1,
+              fullName: 1,
+              avatar: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields : {
+        owner : {
+          $first : "$owner"
+        }
+      }
+    }
+  ]);
+
+  console.log("recomeended " ,snippet);
+  
+
+  if (!snippet) {
+    throw new ApiError(404, "No snippets found");
+  }
+
+  res.status(200).json(new ApiResponse(200, snippet, "Recommended snippets"));
+});
+
 export {
   addSnippet,
   editSnippet,
   getSnippets,
+  getSnippetDetails,
   getSnippetVersions,
+  getRecommendedSnippets,
   deleteSnippet,
   deleteVersion,
-  addView
+  addView,
 };
