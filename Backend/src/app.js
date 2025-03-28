@@ -9,7 +9,7 @@ const app = express();
 
 // Configure CORS options
 
-const whitelist = ["https://snippethub-one.vercel.app" , "https://www.snippethub.tech"]
+const whitelist = ["https://snippethub-one.vercel.app" , "https://snippethub.tech"]
 
 
 const corsOptions = {
