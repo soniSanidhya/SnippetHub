@@ -5,7 +5,15 @@ import { asyncHandler } from '../Utils/asyncHandler.js';
 
 export const generateSitemap = asyncHandler(async (req, res) => {
   // Create a stream for sitemap
-  const stream = new SitemapStream({ hostname: 'https://snippethub.tech' });
+  const stream = new SitemapStream({ 
+    hostname: 'https://snippethub.tech',
+    xmlns: {
+      news: false,
+      xhtml: false,
+      image: false,
+      video: false
+    }
+  });
   
   // Add static routes
   const staticRoutes = [
@@ -28,19 +36,19 @@ export const generateSitemap = asyncHandler(async (req, res) => {
   // Convert database data to sitemap entries
   const dynamicRoutes = [
     ...snippets.map(snippet => ({
-      url: `/snippets/${snippet._id}`,
+      url: encodeURI(`/snippets/${snippet._id}`),
       lastmod: snippet.updatedAt,
       changefreq: 'weekly',
       priority: 0.6
     })),
     ...collections.map(collection => ({
-      url: `/collections/${collection._id}`,
+      url: encodeURI(`/collections/${collection._id}`),
       lastmod: collection.updatedAt,
       changefreq: 'weekly',
       priority: 0.6
     })),
     ...users.map(user => ({
-      url: `/user/${user.username}`,
+      url: encodeURI(`/user/${user.username}`),
       lastmod: user.updatedAt,
       changefreq: 'weekly',
       priority: 0.6
