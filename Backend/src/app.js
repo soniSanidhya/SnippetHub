@@ -52,6 +52,8 @@ import followRouter from "./Routes/follow.routes.js";
 import categoryRouter from "./Routes/category.routes.js";
 import dashboardRouter from "./Routes/dashBoard.routes.js";
 import searchRouter from "./Routes/search.routes.js";
+import sitemapRouter from "./Routes/sitemap.routes.js";
+
 app.use("/api/user", userRouter);
 app.use("/api/snippet", snippetRouter);
 app.use("/api/comment", commentRouter);
@@ -61,4 +63,6 @@ app.use("/api/follow", followRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/dashboard" , dashboardRouter); 
 app.use("/api/search", searchRouter);
+app.use("/", sitemapRouter);
+
 export { app };
