@@ -42,10 +42,8 @@ export default function SnippetDetail({ onClose = () => {} }) {
     }
   }, [snippetData]);
 
-  console.log(snippet?.owner?._id);
-  console.log(user._id);
-
   useEffect(() => {
+    if(!user) return;
     if (snippet?.owner?._id === user?._id) {
       setIsOwner(true);
     } else {
