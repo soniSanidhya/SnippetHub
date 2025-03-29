@@ -16,17 +16,22 @@ import Auth from "./pages/Auth";
 import AuthGuard from "./components/AuthGuard";
 import SnippetDetail from "./components/SnippetDetail";
 import { useEffect, useState } from "react";
+import Sitemap from "./pages/Sitemap";
 
 function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <Router>
+      <Routes>
+      <Route path="/sitemap.xml" element={<Sitemap/>} />
+      </Routes>
         <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
           <Header />
           <main className="flex-grow">
             <AnimatePresence mode="wait">
               <Routes>
                 <Route path="/" element={<Home />} />
+                
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/snippets/:id" element={<SnippetDetail />} />
                 <Route path="/snippet/details" element={<SnippetDetail />} />

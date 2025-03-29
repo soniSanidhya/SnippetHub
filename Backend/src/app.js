@@ -28,12 +28,16 @@ const corsOptions = {
       // Allow credentials (cookies, headers)
 };
 
-app.use(cors(corsOptions)); // Apply CORS middleware
+
+
+
 app.use(express.json({ limit: "100mb" })); // Parse JSON payloads
 app.use(express.urlencoded({ extended: true, limit: "100mb" })); // Parse URL-encoded payloads
 app.use(express.static("public")); // Serve static files
 app.use(cookieParser()); // Parse cookies
 
+app.use("/", sitemapRouter);
+app.use(cors(corsOptions)); // Apply CORS middleware
 // Handle preflight requests
 app.options('*', cors(corsOptions));
 
@@ -63,6 +67,6 @@ app.use("/api/follow", followRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/dashboard" , dashboardRouter); 
 app.use("/api/search", searchRouter);
-app.use("/", sitemapRouter);
+
 
 export { app };
