@@ -7,6 +7,8 @@ const fetchSiteMap = api.get('/sitemap.xml');
 
 const Sitemap = () => {
 
+    console.log("sitemap");
+    
     const [siteMap , setSiteMap] = React.useState(null);
 
     useEffect(()=>{
