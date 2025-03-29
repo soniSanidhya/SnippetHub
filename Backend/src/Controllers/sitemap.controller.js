@@ -17,8 +17,17 @@ const escapeXML = (unsafe) => {
 	});
 };
 
+// Helper to safely convert a date value to ISO string
+const safeToISOString = (value) => {
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+};
+
 export const generateSitemap = asyncHandler(async (req, res) => {
   try {
+
+    console.log("called");
+    
     // Add static routes
     const staticRoutes = [
       { url: '/', changefreq: 'daily', priority: 1 },
@@ -32,30 +41,38 @@ export const generateSitemap = asyncHandler(async (req, res) => {
 
     // Get dynamic routes from database
     const [snippets, collections, users] = await Promise.all([
-      mongoose.model('Snippet').find({}, 'id updatedAt'),
-      mongoose.model('Collection').find({}, 'id updatedAt'),
+      mongoose.model('Snippet').find({}, '_id updatedAt title'),
+      mongoose.model('Collection').find({}, '_id updatedAt'),
       mongoose.model('User').find({}, 'username updatedAt')
     ]);
 
-    // Convert database data to sitemap entries with proper XML escaping
+    console.log(snippets, collections, users);
+    
+    // Convert database data to sitemap entries with proper XML escaping & safe date formatting
     const dynamicRoutes = [
-      ...snippets.map(snippet => ({
-        url: escapeXML(`/snippets/${snippet._id.toString()}`),
-        lastmod: snippet.updatedAt.toISOString(),
+      ...snippets.map(snippet => {
+      const params = new URLSearchParams({
+        title: snippet.title,
+        id: snippet._id.toString()
+      });
+      return {
+        url: `/snippet/details/?${params.toString()}`,
+        lastmod: safeToISOString(snippet.updatedAt),
         changefreq: 'weekly',
         priority: 0.6
-      })),
+      };
+      }),
       ...collections.map(collection => ({
-        url: escapeXML(`/collections/${collection._id.toString()}`),
-        lastmod: collection.updatedAt.toISOString(),
-        changefreq: 'weekly',
-        priority: 0.6
+      url: `/collections/${collection._id.toString()}`,
+      lastmod: safeToISOString(collection.updatedAt),
+      changefreq: 'weekly',
+      priority: 0.6
       })),
       ...users.map(user => ({
-        url: escapeXML(`/user/${user.username}`),
-        lastmod: user.updatedAt.toISOString(),
-        changefreq: 'weekly',
-        priority: 0.6
+      url: `/user/${user.username}`,
+      lastmod: safeToISOString(user.updatedAt),
+      changefreq: 'weekly',
+      priority: 0.6
       }))
     ];
 
