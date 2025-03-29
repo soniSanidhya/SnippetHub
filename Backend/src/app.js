@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-
+import sitemapRouter from "./Routes/sitemap.routes.js";
 dotenv.config();
 
 const app = express();
@@ -56,7 +56,7 @@ import followRouter from "./Routes/follow.routes.js";
 import categoryRouter from "./Routes/category.routes.js";
 import dashboardRouter from "./Routes/dashBoard.routes.js";
 import searchRouter from "./Routes/search.routes.js";
-import sitemapRouter from "./Routes/sitemap.routes.js";
+
 
 app.use("/api/user", userRouter);
 app.use("/api/snippet", snippetRouter);
