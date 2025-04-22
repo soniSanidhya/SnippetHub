@@ -5,6 +5,7 @@ import { Version } from "../Models/version.model.js";
 import { ApiError } from "../Utils/apiError.js";
 import { ApiResponse } from "../Utils/ApiResponse.js";
 import { asyncHandler } from "../Utils/asyncHandler.js";
+import { getGroqChatCompletion } from "../Utils/AI.js";
 
 const addSnippet = asyncHandler(async (req, res) => {
   const { title, code, language, tags, documentation, category, description } =
@@ -13,9 +14,40 @@ const addSnippet = asyncHandler(async (req, res) => {
   if (!title || !code || !language) {
     throw new ApiError(400, "Please provide all the required fields");
   }
-  console.log(category);
+  const data = `title : ${title}
+  code : ${code}
+  language : ${language}
+  tags : ${tags}
+  documentation : ${documentation}
+  category : ${category}
+  description : ${description}
+  `;
+  const justifies = await getGroqChatCompletion(data);
+  const justifiesData = JSON.parse(justifies);
+  console.log("justifiesData", justifiesData.justifies);
+  
+  if (!justifiesData.justifies) {
+    console.log("problem ", justifiesData.problem);
+    res
+      .status(202)
+      .json(
+        new ApiResponse(
+          202,
+          justifiesData,
+          "Snippet Does not justify the metadata"
+        )
+      );
+      console.log("problem ", justifiesData.problem);
+      return
+      
+  }
+
+  console.log("justifies", justifies);
+
+  // console.log(category);
   let categ = await Category.findOne({ name: category });
-  console.log(categ);
+  // console.log(categ);
+
   if (!categ) {
     console.log("Category not found");
 
@@ -24,9 +56,9 @@ const addSnippet = asyncHandler(async (req, res) => {
 
   const tagsArray = tags.split(",").map((tag) => tag.trim());
 
-  console.log(categ);
+  // console.log(categ);
 
-  console.log(categ?._id);
+  // console.log(categ?._id);
   const snippet = await Snippet.create({
     owner: req.user._id,
     title,
@@ -55,7 +87,7 @@ const addSnippet = asyncHandler(async (req, res) => {
 
   res
     .status(201)
-    .json(new ApiResponse(201, snippet, "Snippet successfully added"));
+    .json(new ApiResponse(201, { justifiesData , snippet}, "Snippet successfully added"));
 });
 
 const editSnippet = asyncHandler(async (req, res) => {
@@ -433,20 +465,19 @@ const addView = asyncHandler(async (req, res) => {
 const getRecommendedSnippets = asyncHandler(async (req, res) => {
   // const { tags } = req.params;
   const tags = req.query.tags;
-  console.log("params" , req.params);
-  
+  console.log("params", req.params);
+
   if (!tags) {
     throw new ApiError(400, "Please provide tags");
   }
 
   console.log(tags);
-  
 
   const snippet = await Snippet.aggregate([
     {
       $match: {
-       tags : { $in : tags }
-      }
+        tags: { $in: tags },
+      },
     },
     {
       $lookup: {
@@ -466,16 +497,15 @@ const getRecommendedSnippets = asyncHandler(async (req, res) => {
       },
     },
     {
-      $addFields : {
-        owner : {
-          $first : "$owner"
-        }
-      }
-    }
+      $addFields: {
+        owner: {
+          $first: "$owner",
+        },
+      },
+    },
   ]);
 
-  console.log("recomeended " ,snippet);
-  
+  console.log("recomeended ", snippet);
 
   if (!snippet) {
     throw new ApiError(404, "No snippets found");

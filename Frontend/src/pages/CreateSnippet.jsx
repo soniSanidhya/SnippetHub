@@ -16,6 +16,7 @@ export default function CreateSnippet() {
   const [documentation, setDocumentation] = useState(
     "# How it works\n\nDescribe how your code works here..."
   );
+  const [justifies, setJustifies] = useState({});
   const [language, setLanguage] = useState({
     value: "javascript",
     label: "JavaScript",
@@ -85,17 +86,26 @@ export default function CreateSnippet() {
   const { mutate, error, isError, isPending } = useMutation({
     mutationFn: () => postSnippet(data),
     onSuccess: (data) => {
-      setData(null);
-      setTitle("");
-      setDescription("");
-      setDocumentation("# How it works\n\nDescribe how your code works here...");
-      setLanguage(languageOptions[0]);
-      setCategory(categoryOptions[0]);
-      setCode("");
-      setTags("");
+
+      console.log(data.data.data.justifies);
+      
+     if (!data.data.data.justifies){
+        setJustifies(data.data.data);
+        console.log(data.data.data);
+      }else{
+
+      // setData(null);
+      // setTitle("");
+      // setDescription("");
+      // setDocumentation("# How it works\n\nDescribe how your code works here...");
+      // setLanguage(languageOptions[0]);
+      // setCategory(categoryOptions[0]);
+      // setCode("");
+      // setTags("");
       
       showSuccess("Snippet created successfully");
       // console.log(data);
+      }
     },
     onError: (error) => {
       const parser = new DOMParser();
@@ -111,6 +121,9 @@ export default function CreateSnippet() {
     setCategoryOptions((prevOptions) => [...prevOptions, newOption]);
     setCategory(newOption); // Automatically select the newly created option
   };
+
+  console.log("Justifies", justifies);
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -132,6 +145,30 @@ export default function CreateSnippet() {
   // Collect data for submission
 
   // console.log(data);
+
+
+  const JustifyPopup = () => {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
+          <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+            Your Code snippets is not Uploaded
+            </h2>        
+          {justifies.problem && (
+            <p className="mb-2">Problem: {justifies.problem}</p>
+          )}
+          {justifies.tips && <p>Tips: {justifies.tips}</p>}
+          <button
+            onClick={() => setJustifies({})}
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
@@ -271,6 +308,7 @@ export default function CreateSnippet() {
           </div>
         </form>
       </div>
+      { justifies && Object.keys(justifies)?.length > 0 &&   justifies?.problem?.length > 0  && <JustifyPopup />}
     </div>
   );
 }
