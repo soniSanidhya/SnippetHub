@@ -92,16 +92,17 @@ export default function CreateSnippet() {
      if (!data.data.data.justifies){
         setJustifies(data.data.data);
         console.log(data.data.data);
+        
       }else{
 
-      // setData(null);
-      // setTitle("");
-      // setDescription("");
-      // setDocumentation("# How it works\n\nDescribe how your code works here...");
-      // setLanguage(languageOptions[0]);
-      // setCategory(categoryOptions[0]);
-      // setCode("");
-      // setTags("");
+      setData(null);
+      setTitle("");
+      setDescription("");
+      setDocumentation("# How it works\n\nDescribe how your code works here...");
+      setLanguage(languageOptions[0]);
+      setCategory(categoryOptions[0]);
+      setCode("");
+      setTags("");
       
       showSuccess("Snippet created successfully");
       // console.log(data);
