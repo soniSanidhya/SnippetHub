@@ -1,5 +1,10 @@
 import { motion } from 'framer-motion';
 import LZString from 'lz-string';
+import { api } from '../../utils/axiosHelper';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+
+const execute = ({code, language}) => api.post('snippet/code-execution', {code, language});
 
 export default function SnippetCodeExecution({ snippet = {} }) {
   const redirectToCodesandbox = () => {
@@ -37,6 +42,24 @@ export default function SnippetCodeExecution({ snippet = {} }) {
     );
   };
 
+  console.log(snippet, 'snippet');
+  
+  const [output, setOutput] = useState('Code output will be displayed here');
+
+  const {isPending , mutate , error } = useMutation({
+    mutationFn: () => execute({ code: snippet.currentVersion.updatedCode, language: snippet.language }),
+    onSuccess: (data) => {
+      console.log('Code executed successfully:', data);
+      setOutput(data.data.output || 'No output returned');
+    },
+    onError: (error) => {
+      console.error('Error executing code:', error);
+
+    }
+  });
+
+  console.log(output, 'data');
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -44,7 +67,7 @@ export default function SnippetCodeExecution({ snippet = {} }) {
           Code Execution
         </h3>
         <button
-          onClick={redirectToCodesandbox}
+          onClick={mutate}
           className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,11 +91,22 @@ export default function SnippetCodeExecution({ snippet = {} }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-gray-900 rounded-lg p-4"
+        className="bg-gray-900 rounded-lg p-4 shadow-lg border border-gray-700"
       >
         <div className="font-mono text-sm text-white whitespace-pre-wrap">
           <div className="text-gray-400">
-            You will be redirected to CodeSandbox to try out the code.
+            {isPending ? (
+              <div className="animate-pulse bg-gray-700 rounded-lg h-8 w-1/2 p-2">Executing...</div>
+            ) : error ? (
+              <div className="text-red-400">
+                Error: {error.message || 'Something went wrong during execution'}
+              </div>
+            ) : (
+              <pre className="bg-gray-800 p-3 rounded-lg overflow-auto max-h-64">
+                {output}
+              </pre>
+            )}
+            
           </div>
         </div>
       </motion.div>
