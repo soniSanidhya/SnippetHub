@@ -42,14 +42,10 @@
       }
       ]
     },
-    {
-      "source": "/sitemap.xml",
-      "headers": [
-      {
-        "key": "Content-Type",
-        "value": "application/xml"
-      }
-      ]
-    }
+    
+        {
+          "source": "/sitemap.xml",
+          "destination": "https://snippethub-backend.vercel.app/sitemap.xml"
+        }    
   ]
 }
