@@ -42,13 +42,6 @@
       }
       ]
     }
-  ],
-  "redirects": [
-      {
-        "source": "/sitemap.xml",
-        "destination": "https://snippethub-backend.vercel.app/sitemap.xml",
-        "permanent": true
-      }
-    ]
+  ] 
   
 }
