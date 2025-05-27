@@ -61,6 +61,7 @@ export default function CodeEditor({
       <Editor
         height={height}
         defaultLanguage={language}
+        language={language}
         value={value}
         onChange={handleEditorChange}
         theme="vs-dark"
