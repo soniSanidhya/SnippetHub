@@ -87,6 +87,7 @@ export default function CreateSnippet() {
     mutationFn: () => postSnippet(data),
     onSuccess: (data) => {
 
+      showSuccess("Snippet removed successfully");
       console.log(data.data.data.justifies);
       
      if (!data.data.data.justifies){
