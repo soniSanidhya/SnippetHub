@@ -159,6 +159,8 @@ The frontend application will start on `http://localhost:5173`
 | `GROQ_API_KEY` | Groq AI API key for AI features | - |
 | `RAPID_API_KEY_JUDGE0` | Judge0 API key for code execution | - |
 
+> **Note**: The application will start without the optional API keys, but AI features and code execution will not be available. For full functionality, obtain API keys from the respective services.
+
 ## 🧪 Development
 
 ### Backend Development
