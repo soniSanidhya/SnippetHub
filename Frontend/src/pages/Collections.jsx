@@ -81,15 +81,18 @@ export default function Collections() {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="min-h-screen py-8 text-white">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            My Collections
-          </h1>
+        <div className="glass-card p-6 mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-white drop-shadow-lg">
+              My Collections
+            </h1>
+            <div className="w-20 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mt-2"></div>
+          </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            className="glass-card bg-gradient-to-r from-blue-500/80 to-purple-600/80 text-white px-6 py-3 rounded-lg hover:scale-105 transition-all duration-300 hover:shadow-lg border-0 font-semibold"
           >
             Create Collection
           </button>
@@ -107,10 +110,10 @@ export default function Collections() {
               <Link
                 key={collection._id}
                 to={`/collections/${collection._id}`}
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                className="glass-card p-6 hover:scale-105 hover:shadow-2xl transition-all duration-300 group"
               >
                 <div className="flex justify-between">
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+                  <h3 className="text-xl font-semibold mb-2 text-white drop-shadow-md group-hover:text-blue-300 transition-colors">
                     {collection.name}
                   </h3>
                   <svg
@@ -169,12 +172,14 @@ export default function Collections() {
                     </g>
                   </svg>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                <p className="text-gray-200 mb-4 drop-shadow-sm">
                   {collection.description}
                 </p>
-                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  <span>{collection.snippets?.length} snippets</span>
-                  <span>
+                <div className="flex items-center justify-between text-sm text-gray-300 mb-4">
+                  <span className="glass-card bg-blue-500/30 text-blue-200 px-3 py-1 rounded-full border border-blue-400/30">
+                    {collection.snippets?.length} snippets
+                  </span>
+                  <span className="text-gray-300">
                     Updated{" "}
                     {new Date(collection?.updatedAt).toLocaleDateString()}
                   </span>
@@ -185,11 +190,12 @@ export default function Collections() {
         </div>
 
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="glass-card p-8 w-full max-w-md mx-4">
+              <h2 className="text-2xl font-bold mb-6 text-white drop-shadow-lg text-center">
                 Create New Collection
               </h2>
+              <div className="w-16 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mx-auto mb-6"></div>
               <form onSubmit={handleCreateCollection} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">

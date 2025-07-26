@@ -104,66 +104,70 @@ export default function Explore() {
   const snippetCard = (snippet) => (
     <div
       key={snippet._id}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition-shadow"
+      className="glass-card p-6 cursor-pointer hover:scale-105 hover:shadow-2xl transition-all duration-300 group"
       onClick={() => handleSnippetClick(snippet)}
     >
       <div className="flex items-center max-w-full mb-4">
         <div>
-          <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+          <h3 className="text-xl font-semibold mb-2 text-white drop-shadow-md group-hover:text-blue-300 transition-colors">
             {snippet?.title.length > 30 ? snippet.title.slice(0, 30) + "..." : snippet.title}
           </h3>
-          <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center space-x-2 text-sm text-gray-300">
             <Link
               to={`/user/${snippet.owner.username}`}
-              className="flex items-center space-x-2 hover:text-blue-500"
+              className="flex items-center space-x-2 hover:text-blue-300 transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+              <div className="w-6 h-6 glass-card rounded-full flex items-center justify-center">
                 {snippet.owner?.avatar ? (
                   <img
                     src={snippet.owner?.avatar}
                     alt={snippet.owner?.fullName || snippet.owner?.username}
-                    className="w-8 h-8 rounded-full"
+                    className="w-8 h-8 rounded-full ring-2 ring-white/20"
                   />
                 ) : (
-                  <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-medium">
+                  <div className="w-8 h-8 glass-card rounded-full flex items-center justify-center">
+                    <span className="text-sm font-medium text-white">
                       {snippet.owner?.fullName?.charAt(0) || snippet.owner?.username?.charAt(0)}
                     </span>
                   </div>
                 )}
               </div>
-              <span>{snippet.owner.username}</span>
+              <span className="text-white">{snippet.owner.username}</span>
             </Link>
-            <span>•</span>
-            <span>{new Date(snippet.createdAt).toLocaleDateString()}</span>
+            <span className="text-gray-400">•</span>
+            <span className="text-gray-300">{new Date(snippet.createdAt).toLocaleDateString()}</span>
           </div>
         </div>
       </div>
-      <div className="flex items-center space-x-2">
-        <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-sm">
+      <div className="flex items-center space-x-2 mb-4">
+        <span className="glass-card bg-blue-500/30 text-blue-200 px-3 py-1 rounded-full text-sm border border-blue-400/30">
           {snippet.language}
         </span>
-        <span className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full text-sm">
+        <span className="glass-card bg-purple-500/30 text-purple-200 px-3 py-1 rounded-full text-sm border border-purple-400/30">
           {snippet.category[0].name}
         </span>
       </div>
-      <p className="text-gray-600 dark:text-gray-300 mb-4">
+      <p className="text-gray-200 mb-4 drop-shadow-sm">
         {snippet?.description?.length > 100 ? snippet.description.slice(0, 100) + "..." : snippet.description}
       </p>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-300">
-          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-          </svg>
-          {snippet.voteCount}
-          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-          </svg>
-          {snippet.commentCount}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-4 text-gray-300">
+          <div className="flex items-center space-x-1">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+            </svg>
+            <span>{snippet.voteCount}</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+            </svg>
+            <span>{snippet.commentCount}</span>
+          </div>
         </div>
       </div>
-      <div className="mt-4">
+      <div className="glass-card rounded-lg overflow-hidden border border-white/20">
         <CodeEditor
           value={snippet.currentVersion.updatedCode}
           language={snippet.language}
@@ -178,13 +182,17 @@ export default function Explore() {
   if (isSearchError) return <div>{searchError?.message}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="min-h-screen py-8 text-white">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Explore Snippets</h1>
+          <div className="glass-card p-6 mb-6 text-center">
+            <h1 className="text-3xl font-bold text-white drop-shadow-lg">Explore Snippets</h1>
+            <div className="w-20 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mx-auto mt-2"></div>
+          </div>
+          
           <div className="space-y-4">
             <div className="flex items-center gap-4 max-sm:flex-col max-sm:items-start">
-              <div className="w-full flex border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg">
+              <div className="w-full glass-card rounded-lg border border-white/20">
                 <SearchAutocomplete
                   className="flex-1"
                   searchQuery={searchQuery}

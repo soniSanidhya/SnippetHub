@@ -43,6 +43,8 @@ const CustomSelect = ({ options, value, onChange, onCreateOption  , placeholder 
             backgroundColor: 'var(--select-bg)',
             borderColor: state.isFocused ? 'var(--select-border-focus)' : 'var(--select-border)',
             boxShadow: state.isFocused ? '0 0 0 1px var(--select-border-focus)' : 'none',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '8px',
             transition: 'all 0.2s ease',
             '&:hover': {
               borderColor: 'var(--select-border-hover)',
@@ -52,7 +54,10 @@ const CustomSelect = ({ options, value, onChange, onCreateOption  , placeholder 
           menu: (base) => ({
             ...base,
             backgroundColor: 'var(--select-bg)',
-            border: '1px solid var(--select-border)'
+            border: '1px solid var(--select-border)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '8px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
           }),
           option: (base, { isFocused, isSelected }) => ({
             ...base,
@@ -118,31 +123,31 @@ const CustomSelect = ({ options, value, onChange, onCreateOption  , placeholder 
 
       <style>{`
         :root {
-          --select-hover: #f7fafc;
-          --select-primary-hover: #ebf8ff;
-          --select-bg: white;
-          --select-text: #1a202c;
-          --select-text-placeholder: #718096;
-          --select-border: #e2e8f0;
-          --select-border-hover: #cbd5e0;
-          --select-border-focus: #4299e1;
-          --select-primary: #4299e1;
-          --select-primary-darker: #3182ce;
-          --select-gradient-start: #4299e1;
-          --select-gradient-end: #667eea;
+          --select-hover: rgba(255, 255, 255, 0.1);
+          --select-primary-hover: rgba(99, 102, 241, 0.1);
+          --select-bg: rgba(255, 255, 255, 0.1);
+          --select-text: #ffffff;
+          --select-text-placeholder: #d1d5db;
+          --select-border: rgba(255, 255, 255, 0.2);
+          --select-border-hover: rgba(255, 255, 255, 0.3);
+          --select-border-focus: rgba(99, 102, 241, 0.5);
+          --select-primary: rgba(99, 102, 241, 0.8);
+          --select-primary-darker: rgba(79, 70, 229, 0.9);
+          --select-gradient-start: #6366f1;
+          --select-gradient-end: #8b5cf6;
         }
 
         .dark {
-          --select-hover: #374151;
-          --select-primary-hover: #1f2937;
-          --select-bg: #1f2937;
-          --select-text: #f3f4f6;
-          --select-text-placeholder: #9ca3af;
-          --select-border: #374151;
-          --select-border-hover: #4b5563;
-          --select-border-focus: #60a5fa;
-          --select-primary: #3b82f6;
-          --select-primary-darker: #2563eb;
+          --select-hover: rgba(0, 0, 0, 0.1);
+          --select-primary-hover: rgba(59, 130, 246, 0.1);
+          --select-bg: rgba(0, 0, 0, 0.1);
+          --select-text: #ffffff;
+          --select-text-placeholder: #d1d5db;
+          --select-border: rgba(255, 255, 255, 0.1);
+          --select-border-hover: rgba(255, 255, 255, 0.2);
+          --select-border-focus: rgba(59, 130, 246, 0.5);
+          --select-primary: rgba(59, 130, 246, 0.8);
+          --select-primary-darker: rgba(37, 99, 235, 0.9);
           --select-gradient-start: #3b82f6;
           --select-gradient-end: #6366f1;
         }
