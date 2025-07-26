@@ -20,7 +20,7 @@ import Sitemap from "./pages/Sitemap";
 
 function App() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <Router>
         <div className="relative min-h-screen">
           {/* Glassmorphism Animated Background */}

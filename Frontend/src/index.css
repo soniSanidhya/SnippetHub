@@ -33,6 +33,12 @@
   z-index: -1;
 }
 
+/* Light theme pure white background */
+.light .glassmorphism-bg {
+  background: #ffffff;
+  animation: none;
+}
+
 .glassmorphism-bg::before {
   content: '';
   position: absolute;
@@ -46,11 +52,16 @@
   animation: float 8s ease-in-out infinite;
 }
 
+/* Remove floating elements in light theme */
+.light .glassmorphism-bg::before {
+  display: none;
+}
+
 /* Enhanced glass effects */
 .glass-morphism {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
 }

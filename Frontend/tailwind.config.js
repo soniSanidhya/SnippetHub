@@ -53,9 +53,9 @@ export default {
     function({ addUtilities }) {
       const newUtilities = {
         '.glass': {
-          background: 'rgba(255, 255, 255, 0.1)',
+          background: 'rgba(255, 255, 255, 0.9)',
           'backdrop-filter': 'blur(20px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid rgba(0, 0, 0, 0.1)',
         },
         '.glass-dark': {
           background: 'rgba(0, 0, 0, 0.1)',
@@ -63,15 +63,15 @@ export default {
           border: '1px solid rgba(255, 255, 255, 0.1)',
         },
         '.glass-card': {
-          background: 'rgba(255, 255, 255, 0.15)',
+          background: 'rgba(255, 255, 255, 0.9)',
           'backdrop-filter': 'blur(20px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid rgba(0, 0, 0, 0.1)',
           'box-shadow': '0 8px 32px rgba(0, 0, 0, 0.1)',
         },
         '.glass-nav': {
-          background: 'rgba(255, 255, 255, 0.8)',
+          background: 'rgba(255, 255, 255, 0.95)',
           'backdrop-filter': 'blur(20px)',
-          border: '1px solid rgba(255, 255, 255, 0.3)',
+          border: '1px solid rgba(0, 0, 0, 0.1)',
         },
         '.glass-nav-dark': {
           background: 'rgba(0, 0, 0, 0.8)',
@@ -84,9 +84,9 @@ export default {
           animation: 'gradient 8s ease infinite',
         },
         '.gradient-glass': {
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8))',
           'backdrop-filter': 'blur(20px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid rgba(0, 0, 0, 0.1)',
         },
       }
       addUtilities(newUtilities, ['responsive', 'hover'])
