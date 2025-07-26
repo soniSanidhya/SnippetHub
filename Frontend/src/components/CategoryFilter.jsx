@@ -104,10 +104,10 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
     >
       <button
         onClick={() => onCategoryChange("")}
-        className={`px-4 py-2 min-w-fit whitespace-nowrap rounded-full text-sm font-medium transition-colors ${
+        className={`px-4 py-2 min-w-fit whitespace-nowrap rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 ${
           selectedCategory === ""
-            ? "bg-blue-500 text-white dark:bg-blue-600"
-            : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+            ? "glass-card bg-gradient-to-r from-blue-500/80 to-purple-600/80 text-white border-0 shadow-lg"
+            : "glass-card text-gray-200 border border-white/20 hover:bg-white/10"
         }`}
       >
         All Categories
@@ -118,10 +118,10 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
           <button
             key={category._id}
             onClick={() => onCategoryChange(category.name)}
-            className={`px-4 py-2 min-w-fit whitespace-nowrap rounded-full text-sm font-medium transition-colors ${
+            className={`px-4 py-2 min-w-fit whitespace-nowrap rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 ${
               selectedCategory === category.name
-                ? "bg-blue-500 text-white dark:bg-blue-600"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                ? "glass-card bg-gradient-to-r from-blue-500/80 to-purple-600/80 text-white border-0 shadow-lg"
+                : "glass-card text-gray-200 border border-white/20 hover:bg-white/10"
             }`}
           >
             {category.name.length < 15 ? category.name : category.name.slice(0, 12) + "..."}
