@@ -22,70 +22,77 @@ function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <Router>
-        <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-          <Header />
-          <main className="flex-grow">
-            <AnimatePresence mode="wait">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                
-                <Route path="/explore" element={<Explore />} />
-                <Route path="/snippets/:id" element={<SnippetDetail />} />
-                <Route path="/snippet/details" element={<SnippetDetail />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route
-                  path="/create"
-                  element={
-                    <AuthGuard>
-                      <CreateSnippet />
-                    </AuthGuard>
-                  }
-                />
-                <Route
-                  path="/collections"
-                  element={
-                    <AuthGuard>
-                      <Collections />
-                    </AuthGuard>
-                  }
-                />
-                <Route
-                  path="/collections/:id"
-                  element={
-                    <AuthGuard>
-                      <CollectionDetail />
-                    </AuthGuard>
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <AuthGuard>
-                      <Dashboard />
-                    </AuthGuard>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <AuthGuard>
-                      <Profile />
-                    </AuthGuard>
-                  }
-                />
-                <Route path="/user/:username" element={<UserProfile />} />
-              </Routes>
-            </AnimatePresence>
-          </main>
-          <Footer />
+        <div className="relative min-h-screen">
+          {/* Glassmorphism Animated Background */}
+          <div className="glassmorphism-bg"></div>
+          
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
+              <AnimatePresence mode="wait">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  
+                  <Route path="/explore" element={<Explore />} />
+                  <Route path="/snippets/:id" element={<SnippetDetail />} />
+                  <Route path="/snippet/details" element={<SnippetDetail />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route
+                    path="/create"
+                    element={
+                      <AuthGuard>
+                        <CreateSnippet />
+                      </AuthGuard>
+                    }
+                  />
+                  <Route
+                    path="/collections"
+                    element={
+                      <AuthGuard>
+                        <Collections />
+                      </AuthGuard>
+                    }
+                  />
+                  <Route
+                    path="/collections/:id"
+                    element={
+                      <AuthGuard>
+                        <CollectionDetail />
+                      </AuthGuard>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <AuthGuard>
+                        <Dashboard />
+                      </AuthGuard>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <AuthGuard>
+                        <Profile />
+                      </AuthGuard>
+                    }
+                  />
+                  <Route path="/user/:username" element={<UserProfile />} />
+                </Routes>
+              </AnimatePresence>
+            </main>
+            <Footer />
+          </div>
         </div>
         <Toaster
           position="top-right"
           toastOptions={{
             duration: 3000,
-            className: "dark:bg-gray-800 dark:text-white",
+            className: "glass-morphism dark:glass-morphism-dark",
             style: {
-              background: "var(--toast-bg)",
+              background: "rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(20px)",
+              border: "1px solid rgba(255, 255, 255, 0.2)",
               color: "var(--toast-color)",
             },
           }}
